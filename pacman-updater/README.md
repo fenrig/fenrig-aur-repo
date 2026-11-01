@@ -30,6 +30,10 @@ PKGBUILD makes the minimal equivalent adjustment in the packaged service unit
 when that prefix occurs, so the service can locate the Arch-installed
 executables in `/usr/bin`; no other service behavior is changed.
 
+After installation, the package prints administrator guidance for the
+optional `aur_user` setup and a narrowly scoped wrapper sudoers rule. It does
+not create the account or modify sudoers automatically.
+
 The upstream checkout could not be inspected in the current offline build
 environment. Therefore the PKGBUILD deliberately fails if any requested
 upstream file or executable is absent instead of silently substituting paths.

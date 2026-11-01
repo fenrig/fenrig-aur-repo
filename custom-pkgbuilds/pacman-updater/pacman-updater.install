@@ -1,0 +1,31 @@
+_pacman_updater_message() {
+    cat <<'EOF'
+
+pacman-updater administrator setup:
+
+  This package does not create users, modify sudoers, or enable systemd units.
+  If the optional AUR update stage is enabled, configure aur_user and create
+  that account separately.
+
+  Do not grant aur_user unrestricted sudo access. Review the installed wrapper
+  before adding any sudoers rule. If it is verified to constrain its arguments,
+  a narrowly scoped rule may be appropriate:
+
+    aur_user ALL=(root) NOPASSWD: /usr/lib/pacman-updater/pacman-updater-pacman-wrapper
+
+  Never grant direct unrestricted access to pacman, makepkg, or yay because
+  package build scripts can execute arbitrary commands.
+
+  The timer is installed disabled. Enable it only after reviewing the
+  configuration and administrator-controlled privilege setup.
+
+EOF
+}
+
+post_install() {
+    _pacman_updater_message
+}
+
+post_upgrade() {
+    _pacman_updater_message
+}

@@ -9,6 +9,7 @@ depends=('glibc' 'libsystemd' 'curl' 'systemd' 'git')
 makedepends=('gcc' 'cmake' 'pkgconf')
 source=('pacman-updater::git+https://github.com/fenrig/pacman-updater.git#branch=main')
 sha256sums=('SKIP')
+install=pacman-updater.install
 
 pkgver() {
     cd "$srcdir/pacman-updater"

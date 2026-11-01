@@ -1,5 +1,5 @@
 pkgname=pacman-updater
-pkgver=0.1.0
+pkgver=e6ba05e
 pkgrel=1
 pkgdesc='System updater for pacman and optionally the AUR'
 arch=('x86_64' 'aarch64')
@@ -9,6 +9,7 @@ depends=('glibc' 'libsystemd' 'curl' 'systemd' 'git')
 makedepends=('gcc' 'cmake' 'pkgconf')
 source=('pacman-updater::git+https://github.com/fenrig/pacman-updater.git#branch=main')
 sha256sums=('SKIP')
+install=pacman-updater.install
 
 pkgver() {
     cd "$srcdir/pacman-updater"

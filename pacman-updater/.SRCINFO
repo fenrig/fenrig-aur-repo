@@ -1,8 +1,9 @@
 pkgbase = pacman-updater
 	pkgdesc = System updater for pacman and optionally the AUR
-	pkgver = 0.1.0
+	pkgver = e6ba05e
 	pkgrel = 1
 	url = https://github.com/fenrig/pacman-updater
+	install = pacman-updater.install
 	arch = x86_64
 	arch = aarch64
 	license = MIT
