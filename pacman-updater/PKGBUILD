@@ -1,0 +1,79 @@
+pkgname=pacman-updater
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='System updater for pacman and optionally the AUR'
+arch=('x86_64' 'aarch64')
+url='https://github.com/fenrig/pacman-updater'
+license=('MIT')
+depends=('glibc' 'libsystemd' 'curl' 'systemd' 'git')
+makedepends=('gcc' 'cmake' 'pkgconf')
+source=('pacman-updater::git+https://github.com/fenrig/pacman-updater.git#branch=main')
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/pacman-updater"
+    git describe --tags --long --always | sed 's/^v//; s/\([^-]*\)-\([0-9]*\)-g/\1.r\2.g/; s/-/./g'
+}
+
+prepare() {
+    cd "$srcdir/pacman-updater"
+
+    # Keep the source tree pristine. The package build uses the Arch paths
+    # below and does not invoke the host-level installer.
+    if [[ -f CMakeLists.txt ]]; then
+        return 0
+    fi
+
+    printf '%s\n' 'error: upstream CMakeLists.txt was not found' >&2
+    return 1
+}
+
+build() {
+    cmake -S "$srcdir/pacman-updater" -B "$srcdir/build" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_C_FLAGS='-Wall -Wextra -Wpedantic' \
+        -DCMAKE_C_STANDARD=11 \
+        -DCMAKE_C_STANDARD_REQUIRED=ON \
+        -DCMAKE_C_EXTENSIONS=OFF
+    cmake --build "$srcdir/build" --parallel
+}
+
+check() {
+    if [[ -f "$srcdir/build/CTestTestfile.cmake" ]]; then
+        ctest --test-dir "$srcdir/build" --output-on-failure
+    else
+        printf '%s\n' '==> No CTest test manifest was generated; skipping tests.'
+    fi
+}
+
+package() {
+    local source_root="$srcdir/pacman-updater"
+    local build_root="$srcdir/build"
+
+    install -Dm755 "$build_root/pacman-updater" \
+        "$pkgdir/usr/bin/pacman-updater"
+    install -Dm755 "$build_root/pacman-updater-check" \
+        "$pkgdir/usr/bin/pacman-updater-check"
+
+    install -Dm644 "$source_root/systemd/pacman-updater.service" \
+        "$pkgdir/usr/lib/systemd/system/pacman-updater.service"
+    install -Dm644 "$source_root/systemd/pacman-updater.timer" \
+        "$pkgdir/usr/lib/systemd/system/pacman-updater.timer"
+    install -Dm644 "$source_root/config.example" \
+        "$pkgdir/etc/pacman-updater.conf"
+    install -Dm755 "$source_root/tools/pacman-updater-pacman-wrapper" \
+        "$pkgdir/usr/lib/pacman-updater/pacman-updater-pacman-wrapper"
+    install -Dm644 "$source_root/LICENSE" \
+        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+    # The upstream installer uses /usr/local/bin on non-packaged installs.
+    # Rewrite only that executable prefix in the packaged unit when present;
+    # the systemd unit otherwise remains byte-for-byte identical.
+    if grep -qF '/usr/local/bin/' "$pkgdir/usr/lib/systemd/system/pacman-updater.service"; then
+        sed -i 's#/usr/local/bin/#/usr/bin/#g' \
+            "$pkgdir/usr/lib/systemd/system/pacman-updater.service"
+    fi
+}
+
+backup=('etc/pacman-updater.conf')

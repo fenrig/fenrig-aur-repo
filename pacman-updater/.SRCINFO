@@ -1,0 +1,21 @@
+pkgbase = pacman-updater
+	pkgdesc = System updater for pacman and optionally the AUR
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://github.com/fenrig/pacman-updater
+	arch = x86_64
+	arch = aarch64
+	license = MIT
+	makedepends = gcc
+	makedepends = cmake
+	makedepends = pkgconf
+	depends = glibc
+	depends = libsystemd
+	depends = curl
+	depends = systemd
+	depends = git
+	backup = etc/pacman-updater.conf
+	source = pacman-updater::git+https://github.com/fenrig/pacman-updater.git#branch=main
+	sha256sums = SKIP
+
+pkgname = pacman-updater
