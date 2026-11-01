@@ -16,8 +16,13 @@ pacman-updater administrator setup:
   Never grant direct unrestricted access to pacman, makepkg, or yay because
   package build scripts can execute arbitrary commands.
 
-  The timer is installed disabled. Enable it only after reviewing the
-  configuration and administrator-controlled privilege setup.
+  Both units are installed disabled. After reviewing the configuration and
+  administrator-controlled privilege setup, enable the scheduled updater with:
+
+    sudo systemctl enable --now pacman-updater.timer
+
+  The timer will start pacman-updater.service on its schedule. To run one
+  update immediately, use `sudo systemctl start pacman-updater.service`.
 
 EOF
 }
