@@ -1,0 +1,19 @@
+# Arch makepkg output
+/pacman-updater/pkg/
+/pacman-updater/src/
+**/*.pkg.tar.*
+**/*.log
+**/*.log.*
+**/*.sig
+
+# CMake output
+/pacman-updater/build/
+/pacman-updater/build/CMakeFiles/
+/pacman-updater/build/CMakeCache.txt
+/pacman-updater/build/cmake_install.cmake
+/pacman-updater/build/CTestTestfile.cmake
+/pacman-updater/build/Testing/
+/pacman-updater/build/compile_commands.json
+
+# VCS source checkout created by the pacman-updater PKGBUILD
+/pacman-updater/pacman-updater/
