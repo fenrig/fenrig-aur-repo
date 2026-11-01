@@ -5,6 +5,8 @@ This directory contains an Arch Linux `PKGBUILD` for the upstream
 upstream CMake tests when a CTest manifest is generated, and installs only
 package files; it does not run `install.sh`.
 
+The packaging files in this directory are released under the MIT License.
+
 Build in an Arch environment with:
 
 ```sh
