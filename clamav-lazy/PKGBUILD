@@ -29,6 +29,7 @@ depends=(
   pcre2
   systemd-libs
   zlib
+  check
 )
 provides=(
   "clamav=${pkgver}"
