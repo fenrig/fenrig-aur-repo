@@ -1,5 +1,5 @@
 pkgname=mesh-agent
-pkgver=r2052.g69fc7cc
+pkgver=1.1.0.r0.g0000000
 pkgrel=1
 pkgdesc='MeshCentral remote management agent'
 arch=('x86_64' 'aarch64')
@@ -46,7 +46,7 @@ install=mesh-agent.install
 
 pkgver() {
     cd "$srcdir/MeshAgent"
-    printf 'r%s.g%s' \
+    printf '1.1.0.r%s.g%s' \
         "$(git rev-list --count HEAD)" \
         "$(git rev-parse --short HEAD)"
 }
