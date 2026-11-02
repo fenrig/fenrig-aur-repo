@@ -23,3 +23,6 @@
 
 # VCS source checkout created by the custom-cleanml-helpers PKGBUILD
 /custom-cleanml-helpers/custom_cleanml_helpers/
+
+# VCS source checkout created by the krfb-idle PKGBUILD
+/krfb-idle/krfb/

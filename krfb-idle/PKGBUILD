@@ -1,0 +1,71 @@
+# Maintainer: Antonio Rojas <arojas@archlinux,org>
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+
+pkgname=krfb-idle
+pkgver=r1906.g7bc0489
+pkgrel=1
+pkgdesc='Desktop Sharing'
+url='https://github.com/fenrig/krfb/tree/dev_improve_idle'
+arch=(x86_64)
+license=(LGPL-2.0-or-later)
+provides=(krfb="$pkgver")
+conflicts=(krfb)
+replaces=(krfb)
+depends=(glibc
+         kconfig
+         kconfigwidgets
+         kcoreaddons
+         kcrash
+         kdbusaddons
+         kdnssd
+         ki18n
+         knotifications
+         kpipewire
+         kstatusnotifieritem
+         kwallet
+         kwayland
+         kwidgetsaddons
+         kwindowsystem
+         kxmlgui
+         libstdc++
+         libvncserver
+         libx11
+         libxcb
+         libxtst
+         qt6-base
+         wayland
+         xcb-util-image
+         xdg-desktop-portal)
+makedepends=(extra-cmake-modules
+             git
+             kdoctools
+             libxdamage
+             plasma-wayland-protocols)
+groups=(kde-applications
+        kde-network)
+source=('krfb::git+https://github.com/fenrig/krfb.git#branch=dev_improve_idle')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd krfb
+
+  local git_description
+  if git_description=$(git describe --long --tags --abbrev=7 2>/dev/null); then
+    printf '%s\n' "$git_description" | sed 's/^v//;s/-/.r/;s/-/./'
+  else
+    printf 'r%s.g%s\n' \
+      "$(git rev-list --count HEAD)" \
+      "$(git rev-parse --short HEAD)"
+  fi
+}
+
+build() {
+  cmake -B build -S krfb \
+    -DBUILD_TESTING=OFF
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}
+
