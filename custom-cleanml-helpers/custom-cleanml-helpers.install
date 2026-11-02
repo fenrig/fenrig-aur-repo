@@ -1,0 +1,28 @@
+_custom_cleanml_helpers_message() {
+    cat <<'EOF'
+
+custom-cleanml-helpers administrator setup:
+
+  The cleanup timer is installed disabled. Review the configuration, then
+  enable it with:
+
+    sudo systemctl enable --now bleachbit-cache-clean.timer
+
+  Check its schedule with:
+
+    systemctl list-timers bleachbit-cache-clean.timer
+
+  To run a cleanup immediately, use:
+
+    sudo systemctl start bleachbit-cache-clean.service
+
+EOF
+}
+
+post_install() {
+    _custom_cleanml_helpers_message
+}
+
+post_upgrade() {
+    _custom_cleanml_helpers_message
+}

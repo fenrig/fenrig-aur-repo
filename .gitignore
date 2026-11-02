@@ -1,7 +1,10 @@
 # Arch makepkg output
 /pacman-updater/pkg/
 /pacman-updater/src/
+/*/pkg/
+/*/src/
 **/*.pkg.tar.*
+**/*.src.tar.*
 **/*.log
 **/*.log.*
 **/*.sig
@@ -17,3 +20,6 @@
 
 # VCS source checkout created by the pacman-updater PKGBUILD
 /pacman-updater/pacman-updater/
+
+# VCS source checkout created by the custom-cleanml-helpers PKGBUILD
+/custom-cleanml-helpers/custom_cleanml_helpers/

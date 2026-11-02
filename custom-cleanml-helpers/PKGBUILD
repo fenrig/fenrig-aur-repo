@@ -1,0 +1,56 @@
+pkgname=custom-cleanml-helpers
+pkgver=r2.g1b6f284
+pkgrel=1
+pkgdesc='System-wide BleachBit cleaners and scheduled cache cleanup'
+arch=('any')
+url='https://github.com/fenrig/custom_cleanml_helpers'
+license=('MIT')
+depends=('bash' 'bleachbit' 'systemd' 'util-linux')
+makedepends=('git')
+checkdepends=('libxml2' 'make')
+source=('custom_cleanml_helpers::git+https://github.com/fenrig/custom_cleanml_helpers.git#branch=main')
+sha256sums=('SKIP')
+backup=('etc/bleachbit-cache-clean.conf')
+install=custom-cleanml-helpers.install
+
+pkgver() {
+    cd "$srcdir/custom_cleanml_helpers"
+    printf 'r%s.g%s' \
+        "$(git rev-list --count HEAD)" \
+        "$(git rev-parse --short HEAD)"
+}
+
+check() {
+    cd "$srcdir/custom_cleanml_helpers"
+    ./scripts/check
+}
+
+package() {
+    local source_root="$srcdir/custom_cleanml_helpers"
+    local cleaner cleaner_name installed_name
+
+    install -dm755 "$pkgdir/usr/share/bleachbit/cleaners"
+    for cleaner in "$source_root"/*.xml; do
+        cleaner_name="${cleaner##*/}"
+        case "$cleaner_name" in
+            discord.xml) installed_name=custom_discord.xml ;;
+            vscode.xml) installed_name=custom_vscode.xml ;;
+            *) installed_name="$cleaner_name" ;;
+        esac
+        install -m644 "$cleaner" \
+            "$pkgdir/usr/share/bleachbit/cleaners/$installed_name"
+    done
+
+    install -Dm755 "$source_root/scripts/bleachbit-cache-clean" \
+        "$pkgdir/usr/bin/bleachbit-cache-clean"
+    install -Dm644 "$source_root/bleachbit-cache-clean.conf.example" \
+        "$pkgdir/etc/bleachbit-cache-clean.conf"
+
+    install -Dm644 "$source_root/systemd/bleachbit-cache-clean.service" \
+        "$pkgdir/usr/lib/systemd/system/bleachbit-cache-clean.service"
+    install -Dm644 "$source_root/systemd/bleachbit-cache-clean.timer" \
+        "$pkgdir/usr/lib/systemd/system/bleachbit-cache-clean.timer"
+
+    install -Dm644 "$source_root/LICENSE" \
+        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
