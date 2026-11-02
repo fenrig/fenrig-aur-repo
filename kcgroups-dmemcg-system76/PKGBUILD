@@ -1,0 +1,57 @@
+# Maintainer: Natalie Vock <natalie dot vock at gmx dot de>
+
+pkgbase=kcgroups-dmemcg-system76
+pkgname=('kcgroups-dmemcg-system76' 'plasma-foreground-booster-dmemcg-system76')
+_branch=dmemcg-system76
+
+pkgver=0.1
+pkgrel=1
+
+pkgdesc="KDE library to manipulate cgroups (and boost foreground apps) - fork adding dmem cgroup support"
+arch=('i686' 'x86_64')
+url='https://github.com/fenrig/kcgroups'
+license=('LGPL-2.1-or-later')
+makedepends=('qt6-base' 'plasma-workspace' 'kwindowsystem' 'kconfig' 'kdbusaddons' 'cmake' 'extra-cmake-modules' 'git')
+conflicts=('kcgroups-git' 'kcgroups-dmemcg')
+source=("kcgroups::git+$url#branch=${_branch}"
+	"plasma-foreground-booster::git+$url#branch=${_branch}-foreground-booster")
+sha256sums=('SKIP'
+            'SKIP')
+
+prepare() {
+  mkdir -p kcgroups-build
+  mkdir -p kcgroups-install
+  mkdir -p plasma-foreground-booster-build
+}
+
+build () {
+    cd kcgroups-build
+    cmake ../kcgroups \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DBUILD_WITH_QT6=ON
+    make
+    # HACK: plasma-foreground-booster needs an install of kcgroups to build.
+    # Install it to a temporary directory inside the build area.
+    make DESTDIR="../kcgroups-install" install
+
+    cd ../plasma-foreground-booster-build
+    CMAKE_PREFIX_PATH=../kcgroups-install/usr \
+    cmake ../plasma-foreground-booster \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    make
+}
+
+package_kcgroups-dmemcg-system76() {
+    depends=('qt6-base' 'kwindowsystem' 'kconfig' 'kdbusaddons')
+    cd "kcgroups-build"
+    make DESTDIR="${pkgdir}" install
+}
+
+package_plasma-foreground-booster-dmemcg-system76() {
+    depends=('kcgroups-dmemcg-system76')
+    conflicts=('plasma-foreground-booster-dmemcg')
+    cd "plasma-foreground-booster-build"
+    make DESTDIR="${pkgdir}" install
+}
