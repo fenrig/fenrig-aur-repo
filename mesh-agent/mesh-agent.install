@@ -1,0 +1,27 @@
+_mesh_agent_message() {
+    cat <<'EOF'
+
+Mesh Agent setup:
+
+  Place the MeshCentral-generated agent configuration at:
+
+    /etc/meshagent.msh
+
+  Then enable and start the packaged service with:
+
+    sudo systemctl enable --now mesh-agent.service
+
+  Check its status with:
+
+    systemctl status mesh-agent.service
+
+EOF
+}
+
+post_install() {
+    _mesh_agent_message
+}
+
+post_upgrade() {
+    _mesh_agent_message
+}

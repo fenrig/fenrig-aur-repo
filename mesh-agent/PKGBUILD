@@ -1,0 +1,95 @@
+pkgname=mesh-agent
+pkgver=r2052.g69fc7cc
+pkgrel=1
+pkgdesc='MeshCentral remote management agent'
+arch=('x86_64' 'aarch64')
+url='https://github.com/Ylianst/MeshAgent'
+license=('Apache-2.0')
+provides=('meshagent')
+conflicts=('meshagent')
+depends=(
+  glibc
+  libdrm
+  libjpeg-turbo
+  libx11
+  libxext
+  libxfixes
+  libxkbfile
+  libxrandr
+  libxtst
+  mesa
+  systemd
+  wayland
+)
+makedepends=(
+  gcc
+  git
+  libdrm
+  libjpeg-turbo
+  libx11
+  libxext
+  libxrandr
+  libxtst
+  mesa
+  make
+  openssl
+  pkgconf
+  wayland
+)
+checkdepends=('binutils')
+source=(
+  'MeshAgent::git+https://github.com/fenrig/MeshAgent.git#branch=master'
+  'mesh-agent.service'
+)
+sha256sums=('SKIP' 'SKIP')
+install=mesh-agent.install
+
+pkgver() {
+    cd "$srcdir/MeshAgent"
+    printf 'r%s.g%s' \
+        "$(git rev-list --count HEAD)" \
+        "$(git rev-parse --short HEAD)"
+}
+
+_meshagent_binary() {
+    case "$CARCH" in
+        x86_64) printf '%s\n' meshagent_x86-64 ;;
+        aarch64) printf '%s\n' meshagent_arm64 ;;
+        *)
+            printf 'Unsupported architecture: %s\n' "$CARCH" >&2
+            return 1
+            ;;
+    esac
+}
+
+build() {
+    local archid
+    case "$CARCH" in
+        x86_64) archid=6 ;;
+        aarch64) archid=26 ;;
+        *)
+            printf 'Unsupported architecture: %s\n' "$CARCH" >&2
+            return 1
+            ;;
+    esac
+
+    make -C "$srcdir/MeshAgent" \
+        linux \
+        ARCHID="$archid" \
+        SYSTEMJPEG=1
+}
+
+check() {
+    local binary="$srcdir/MeshAgent/$(_meshagent_binary)"
+    test -x "$binary"
+    readelf -h "$binary" | grep -q 'Class:[[:space:]]*ELF64'
+}
+
+package() {
+    install -Dm755 "$srcdir/MeshAgent/$(_meshagent_binary)" \
+        "$pkgdir/usr/bin/meshagent"
+    install -Dm644 "$srcdir/MeshAgent/readme.md" \
+        "$pkgdir/usr/share/doc/$pkgname/README.md"
+    install -Dm644 "$srcdir/mesh-agent.service" \
+        "$pkgdir/usr/lib/systemd/system/mesh-agent.service"
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=MeshCentral Agent
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/etc/meshagent.msh
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/mesh-agent
+StateDirectory=mesh-agent
+ExecStartPre=/usr/bin/ln -sfn /etc/meshagent.msh /var/lib/mesh-agent/meshagent.msh
+ExecStart=/usr/bin/meshagent --configUsesCWD=1
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
