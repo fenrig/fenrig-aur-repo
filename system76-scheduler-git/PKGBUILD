@@ -23,7 +23,9 @@ backup=(
 
 pkgver() {
   cd ${_pkgname}
-  git describe --tags --long --always | sed 's/^v//' | tr '-' '.'
+  printf 'r%s.g%s' \
+        "$(git rev-list --count HEAD)" \
+        "$(git rev-parse --short HEAD)"
 }
 
 build() {

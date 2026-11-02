@@ -13,7 +13,9 @@ install=pacman-updater.install
 
 pkgver() {
     cd "$srcdir/pacman-updater"
-    git describe --tags --long --always | sed 's/^v//; s/\([^-]*\)-\([0-9]*\)-g/\1.r\2.g/; s/-/./g'
+    printf 'r%s.g%s' \
+        "$(git rev-list --count HEAD)" \
+        "$(git rev-parse --short HEAD)"
 }
 
 prepare() {

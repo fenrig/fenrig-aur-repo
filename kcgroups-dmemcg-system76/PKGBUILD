@@ -4,7 +4,7 @@ pkgbase=kcgroups-dmemcg-system76
 pkgname=('kcgroups-dmemcg-system76' 'plasma-foreground-booster-dmemcg-system76')
 _branch=dmemcg-system76
 
-pkgver=0.1
+pkgver=0
 pkgrel=1
 
 pkgdesc="KDE library to manipulate cgroups (and boost foreground apps) - fork adding dmem cgroup support"
@@ -17,6 +17,13 @@ source=("kcgroups::git+$url#branch=${_branch}"
 	"plasma-foreground-booster::git+$url#branch=${_branch}-foreground-booster")
 sha256sums=('SKIP'
             'SKIP')
+
+pkgver() {
+    cd "$srcdir/kcgroups"
+    printf 'r%s.g%s' \
+        "$(git rev-list --count HEAD)" \
+        "$(git rev-parse --short HEAD)"
+}
 
 prepare() {
   mkdir -p kcgroups-build
