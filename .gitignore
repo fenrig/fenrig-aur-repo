@@ -29,3 +29,6 @@
 
 # VCS source checkout created by the krfb-idle PKGBUILD
 /krfb-idle/krfb/
+
+# VCS source checkout created by the stremio-enhanced-fenrig PKGBUILD
+/stremio-enhanced-fenrig/stremio-enhanced/

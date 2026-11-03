@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Stremio Enhanced
+Comment=Electron-based Stremio client with plugin and theme support
+Exec=stremio-enhanced-fenrig %U
+Icon=stremio-enhanced-fenrig
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;TV;
+MimeType=x-scheme-handler/stremio;

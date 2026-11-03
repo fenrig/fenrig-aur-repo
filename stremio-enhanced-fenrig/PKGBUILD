@@ -1,0 +1,62 @@
+pkgname=stremio-enhanced-fenrig
+pkgver=1.2.0.r149.gf4eb4b8
+pkgrel=1
+pkgdesc='Electron-based Stremio client with plugin and theme support'
+arch=('x86_64' 'aarch64')
+url='https://github.com/fenrig/stremio-enhanced'
+license=('MIT')
+provides=(
+  "stremio-enhanced=$pkgver"
+  "stremio-enhanced-bin=$pkgver"
+)
+conflicts=('stremio-enhanced' 'stremio-enhanced-bin')
+replaces=('stremio-enhanced' 'stremio-enhanced-bin')
+depends=('electron')
+makedepends=('git' 'npm')
+source=(
+  'stremio-enhanced::git+https://github.com/fenrig/stremio-enhanced.git#branch=main'
+  'stremio-enhanced-fenrig'
+  'stremio-enhanced-fenrig.desktop'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP')
+
+pkgver() {
+  cd "$srcdir/stremio-enhanced"
+  printf '%s.r%s.g%s' \
+    "$(<version)" \
+    "$(git rev-list --count HEAD)" \
+    "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd "$srcdir/stremio-enhanced"
+  npm ci --ignore-scripts --no-audit --no-fund
+}
+
+build() {
+  cd "$srcdir/stremio-enhanced"
+  npm run dist
+  npm prune --omit=dev --ignore-scripts --no-audit --no-fund
+}
+
+package() {
+  local appdir="$pkgdir/usr/lib/stremio-enhanced-fenrig"
+
+  install -dm755 "$appdir"
+  cp -a "$srcdir/stremio-enhanced/dist" "$appdir/"
+  cp -a "$srcdir/stremio-enhanced/images" "$appdir/"
+  cp -a "$srcdir/stremio-enhanced/node_modules" "$appdir/"
+  install -Dm644 "$srcdir/stremio-enhanced/package.json" \
+    "$appdir/package.json"
+  install -Dm644 "$srcdir/stremio-enhanced/version" \
+    "$appdir/version"
+  install -Dm644 "$srcdir/stremio-enhanced/LICENSE.md" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+
+  install -Dm755 "$srcdir/stremio-enhanced-fenrig" \
+    "$pkgdir/usr/bin/stremio-enhanced-fenrig"
+  install -Dm644 "$srcdir/stremio-enhanced-fenrig.desktop" \
+    "$pkgdir/usr/share/applications/stremio-enhanced-fenrig.desktop"
+  install -Dm644 "$appdir/images/icon.png" \
+    "$pkgdir/usr/share/icons/hicolor/512x512/apps/stremio-enhanced-fenrig.png"
+}

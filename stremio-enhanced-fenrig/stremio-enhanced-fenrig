@@ -1,0 +1,5 @@
+#!/bin/sh
+set -efu
+
+cd /usr/lib/stremio-enhanced-fenrig
+exec /usr/bin/electron dist/main.js "$@"
