@@ -5,10 +5,10 @@
 # Contributor: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=clamav-lazy
-pkgver=1.5.2
-_basever=${pkgver}
+pkgver=1.5.4.r11586
+_basever=1.5.4
 _srcname=clamav-dev_lazy_load
-pkgrel=5
+pkgrel=1
 pkgdesc='Anti-virus toolkit for Unix'
 url='https://www.clamav.net/'
 license=(GPL-2.0-only)
@@ -31,6 +31,8 @@ depends=(
   systemd-libs
   zlib
   check
+  python
+  pyside6
 )
 provides=(
   "clamav=${pkgver}"
@@ -74,10 +76,9 @@ sha512sums=('SKIP'
 
 pkgver() {
   cd "${_srcname}"
-  printf '%s.r%s.g%s\n' \
+  printf '%s.r%s\n' \
     "${_basever}" \
-    "$(git rev-list --count HEAD)" \
-    "$(git rev-parse --short=7 HEAD)"
+    "$(git rev-list --count HEAD)"
 }
 
 prepare() {
