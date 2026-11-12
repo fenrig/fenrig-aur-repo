@@ -5,7 +5,7 @@
 # Contributor: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=clamav-lazy
-pkgver=1.5.4.r11586
+pkgver=1.5.4.r11589
 _basever=1.5.4
 _srcname=clamav-dev_lazy_load
 pkgrel=1
@@ -20,7 +20,6 @@ depends=(
   glibc
   json-c
   libgcc
-  libltdl
   libmspack
   libmilter
   libstdc++
@@ -30,9 +29,11 @@ depends=(
   pcre2
   systemd-libs
   zlib
-  check
   python
-  pyside6
+)
+optdepends=(
+  'kdialog: KDE scan progress dialog fallback'
+  'zenity: GTK scan progress dialog fallback'
 )
 provides=(
   "clamav=${pkgver}"
@@ -48,14 +49,11 @@ replaces=(
 )
 makedepends=(
   cargo
+  check
   git
   cmake
   ninja
-  python
-  python-pytest
   systemd
-)
-checkdepends=(
 )
 backup=(
   etc/clamav/clamd.conf
@@ -107,6 +105,7 @@ build() {
     -DCMAKE_INSTALL_SBINDIR=bin \
     -DAPP_CONFIG_DIRECTORY=/etc/clamav \
     -DDATABASE_DIRECTORY=/var/lib/clamav \
+    -DENABLE_KDE_KCM=ON \
     -DENABLE_EXTERNAL_MSPACK=ON \
     -Wno-dev \
     -B build \
@@ -134,6 +133,21 @@ package() {
   install -Dm 644 ../clamav.sysusers "${pkgdir}"/usr/lib/sysusers.d/clamav.conf
   install -Dm 644 ../clamav.tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/clamav.conf
   install -Dm 644 ../clamav.logrotate "${pkgdir}"/etc/logrotate.d/clamav
+
+  if [[ -x ${pkgdir}/usr/bin/clamav-scan-gui ]]; then
+    depends+=(qt6-base)
+  fi
+
+  if [[ -e ${pkgdir}/usr/lib/qt6/plugins/plasma/kcms/systemsettings/kcm_clamav.so ]]; then
+    depends+=(
+      qt6-base
+      kconfigwidgets
+      kcoreaddons
+      kcmutils
+      ki18n
+      polkit
+    )
+  fi
 }
 
 # vim: ts=2 sw=2 et:
