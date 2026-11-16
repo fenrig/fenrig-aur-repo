@@ -5,7 +5,7 @@
 # Contributor: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=clamav-lazy
-pkgver=1.5.4.r11589
+pkgver=1.5.4.r11651
 _basever=1.5.4
 _srcname=clamav-dev_lazy_load
 pkgrel=1
@@ -29,7 +29,6 @@ depends=(
   pcre2
   systemd-libs
   zlib
-  python
 )
 optdepends=(
   'kdialog: KDE scan progress dialog fallback'
@@ -52,7 +51,15 @@ makedepends=(
   check
   git
   cmake
+  gettext
   ninja
+  python
+  qt6-base
+  qt6-tools
+  kconfigwidgets
+  kcoreaddons
+  kcmutils
+  ki18n
   systemd
 )
 backup=(
