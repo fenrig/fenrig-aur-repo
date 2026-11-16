@@ -30,5 +30,8 @@
 # VCS source checkout created by the krfb-idle PKGBUILD
 /krfb-idle/krfb/
 
+# VCS source checkout created by the clamav-lazy PKGBUILD
+/clamav-lazy/clamav-dev_lazy_load/
+
 # VCS source checkout created by the stremio-enhanced-fenrig PKGBUILD
 /stremio-enhanced-fenrig/stremio-enhanced/
