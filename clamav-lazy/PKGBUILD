@@ -5,10 +5,10 @@
 # Contributor: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=clamav-lazy
-pkgver=1.5.4.r11651
+pkgver=1.5.4.r11723
 _basever=1.5.4
 _srcname=clamav-dev_lazy_load
-pkgrel=1
+pkgrel=2
 pkgdesc='Anti-virus toolkit for Unix'
 url='https://www.clamav.net/'
 license=(GPL-2.0-only)
@@ -19,6 +19,10 @@ depends=(
   curl
   glibc
   json-c
+  kcmutils
+  kconfigwidgets
+  kcoreaddons
+  ki18n
   libgcc
   libmspack
   libmilter
@@ -27,6 +31,8 @@ depends=(
   ncurses
   openssl
   pcre2
+  polkit
+  qt6-base
   systemd-libs
   zlib
 )
@@ -47,20 +53,32 @@ replaces=(
   clamav
 )
 makedepends=(
+  bzip2
   cargo
   check
-  git
   cmake
+  curl
   gettext
+  git
+  json-c
+  kconfigwidgets
+  kcmutils
+  kcoreaddons
+  ki18n
+  libmilter
+  libmspack
+  libxml2
+  ncurses
   ninja
+  openssl
+  pcre2
   python
   qt6-base
   qt6-tools
-  kconfigwidgets
-  kcoreaddons
-  kcmutils
-  ki18n
+  rust
   systemd
+  systemd-libs
+  zlib
 )
 backup=(
   etc/clamav/clamd.conf
@@ -140,21 +158,6 @@ package() {
   install -Dm 644 ../clamav.sysusers "${pkgdir}"/usr/lib/sysusers.d/clamav.conf
   install -Dm 644 ../clamav.tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/clamav.conf
   install -Dm 644 ../clamav.logrotate "${pkgdir}"/etc/logrotate.d/clamav
-
-  if [[ -x ${pkgdir}/usr/bin/clamav-scan-gui ]]; then
-    depends+=(qt6-base)
-  fi
-
-  if [[ -e ${pkgdir}/usr/lib/qt6/plugins/plasma/kcms/systemsettings/kcm_clamav.so ]]; then
-    depends+=(
-      qt6-base
-      kconfigwidgets
-      kcoreaddons
-      kcmutils
-      ki18n
-      polkit
-    )
-  fi
 }
 
 # vim: ts=2 sw=2 et:
