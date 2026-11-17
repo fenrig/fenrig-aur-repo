@@ -4,8 +4,8 @@ pkgbase=kcgroups-dmemcg-system76
 pkgname=('kcgroups-dmemcg-system76' 'plasma-foreground-booster-dmemcg-system76')
 _branch=dmemcg-system76
 
-pkgver=0
-pkgrel=2
+pkgver=r82.gd106f1c
+pkgrel=1
 
 pkgdesc="KDE library to manipulate cgroups (and boost foreground apps) - fork adding dmem cgroup support"
 arch=('i686' 'x86_64')
