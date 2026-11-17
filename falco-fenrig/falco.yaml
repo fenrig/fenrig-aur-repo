@@ -1,0 +1,21 @@
+engine:
+  kind: modern_ebpf
+
+rules_files:
+  - /etc/falco/rules.d/*.yaml
+
+json_output: true
+time_format_iso_8601: true
+
+stdout_output:
+  enabled: true
+
+syslog_output:
+  enabled: false
+
+file_output:
+  enabled: true
+  keep_alive: true
+  filename: /var/log/falco/falco.log
+
+priority: notice

@@ -1,0 +1,24 @@
+[Unit]
+Description=Falco runtime security monitor
+Documentation=https://falco.org/docs/
+After=local-fs.target
+ConditionPathExists=/usr/bin/falco
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/falco -c /etc/falco/falco.yaml
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=/var/log/falco
+CapabilityBoundingSet=CAP_BPF CAP_PERFMON CAP_SYS_PTRACE CAP_SYS_RESOURCE CAP_SYS_ADMIN
+AmbientCapabilities=CAP_BPF CAP_PERFMON CAP_SYS_PTRACE CAP_SYS_RESOURCE CAP_SYS_ADMIN
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

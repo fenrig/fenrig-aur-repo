@@ -1,0 +1,23 @@
+post_install() {
+  systemctl daemon-reload >/dev/null 2>&1 || true
+  systemctl enable falco.service >/dev/null 2>&1 || true
+
+  # Starting a service is only possible when this package is being installed
+  # on a live system. `try-start` safely does nothing in an image/chroot.
+  systemctl try-start falco.service >/dev/null 2>&1 || true
+
+  printf '%s\n' \
+    '==> Falco is enabled to start at boot and has been started when possible.' \
+    '    Enable/start manually: sudo systemctl enable --now falco.service' \
+    '    Check status:           systemctl status falco.service' \
+    '    Journal alerts:         journalctl -u falco.service -f' \
+    '    File alerts:            tail -f /var/log/falco/falco.log'
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  systemctl disable --now falco.service >/dev/null 2>&1 || true
+}

@@ -1,0 +1,45 @@
+- list: fenrig_desktop_apps
+  items: [firefox, thunderbird, mumble, stremio, stremio-enhanced, electron, ferdium, discord, wowup-cf, chromium, chromium-browser, google-chrome, google-chrome-stable, brave, brave-browser, vivaldi, opera, microsoft-edge, microsoft-edge-stable, librewolf, floorp, qutebrowser, wine, wine64, wine-preloader, evince, okular, ark, gwenview, spectacle]
+
+- list: fenrig_shells
+  items: [bash, dash, fish, ksh, sh, tcsh, zsh]
+
+- list: fenrig_network_tools
+  items: [curl, wget, nc, ncat, netcat, socat, telnet, ftp, sftp, ssh]
+
+- macro: fenrig_desktop_parent
+  condition: proc.pname in (fenrig_desktop_apps)
+
+- macro: fenrig_desktop_process
+  condition: proc.name in (fenrig_desktop_apps) or proc.pname in (fenrig_desktop_apps)
+
+- macro: fenrig_wine_parent
+  condition: proc.pname in (wine, wine64, wine-preloader)
+
+- rule: Desktop application spawned a shell
+  desc: A desktop application spawned an interactive shell.
+  condition: spawned_process and proc.name in (fenrig_shells) and fenrig_desktop_parent
+  output: Desktop application spawned a shell (user=%user.name parent=%proc.pname shell=%proc.name cmdline=%proc.cmdline)
+  priority: warning
+  tags: [host, process, desktop]
+
+- rule: Wine spawned a network utility
+  desc: A Wine process spawned a native network utility.
+  condition: spawned_process and fenrig_wine_parent and proc.name in (fenrig_network_tools)
+  output: Wine spawned a network utility (user=%user.name parent=%proc.pname process=%proc.name cmdline=%proc.cmdline)
+  priority: warning
+  tags: [host, process, wine, network]
+
+- rule: Desktop application modified user persistence
+  desc: A monitored desktop application wrote to a common user persistence location.
+  condition: open_write and fenrig_desktop_process and fd.name startswith /home/ and (fd.name contains /config/autostart/ or fd.name contains /config/systemd/user/ or fd.name endswith /.bashrc or fd.name endswith /.zshrc or fd.name endswith /.profile)
+  output: Desktop application modified user persistence (user=%user.name process=%proc.name parent=%proc.pname file=%fd.name)
+  priority: warning
+  tags: [host, filesystem, persistence, desktop]
+
+- rule: Desktop application wrote a system configuration file
+  desc: A monitored desktop application attempted to write under /etc or /usr.
+  condition: open_write and fenrig_desktop_process and (fd.name startswith /etc/ or fd.name startswith /usr/)
+  output: Desktop application wrote system configuration (user=%user.name process=%proc.name parent=%proc.pname file=%fd.name)
+  priority: error
+  tags: [host, filesystem, system, desktop]

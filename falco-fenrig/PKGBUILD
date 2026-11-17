@@ -1,0 +1,73 @@
+# Maintainer: Fenrig
+pkgname=falco-fenrig
+pkgver=0.45.2
+pkgrel=6
+pkgdesc='Falco runtime security monitoring with desktop-focused rules for Plasma users'
+arch=('x86_64')
+url='https://falco.org/'
+license=('Apache-2.0')
+depends=('glibc' 'systemd')
+optdepends=('logrotate: rotate /var/log/falco/falco.log')
+makedepends=('cmake' 'gcc' 'git' 'ninja')
+provides=('falco')
+conflicts=('falco' 'falco-bin')
+backup=('etc/falco/falco.yaml')
+install='falco-fenrig.install'
+source=(
+  "falco-${pkgver}-source.tar.gz::https://github.com/falcosecurity/falco/archive/refs/tags/${pkgver}.tar.gz"
+  'falco.service'
+  'falco.yaml'
+  'fenrig-desktop.yaml'
+  'falco.logrotate'
+  'falco-fenrig.install'
+)
+sha256sums=(
+  'fbf23a3a98bcab4abd7c81559de5032aad1eb78995b7e916431f8a685a3944f0'
+  '482fcaab9e5e24445e0275620dbf3acb40947a87d454256d0c5de8d230a84cb7'
+  '08b060f2d1626a28bd06736ba3ef8b06fc61ba5e09ba0c6b373c8d80760a68d3'
+  '8f1a49dc033a30f6773b5e7617a3f0cc19acf6ae4d2e62858a05a896d8b3f6ca'
+  '872b114f65c3a5dac43afb26d131d50a0686279bfcf84d9b49e60be1e078758c'
+  '6ed72ddfd55bc838150d244bb9f67370b07cb6b44e4a14d77d820401e2ab435f'
+)
+
+_upstream_dir="falco-${pkgver}"
+
+build() {
+  # This package is intentionally host-specific. `-march=native` enables the
+  # instruction set supported by the machine doing the build; do not publish
+  # the resulting package for installation on another CPU family/model.
+  export CFLAGS="${CFLAGS} -march=native -mtune=native"
+  export CXXFLAGS="${CXXFLAGS} -march=native -mtune=native"
+
+  cmake -S "${srcdir}/${_upstream_dir}" -B "${srcdir}/build" -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
+    -DUSE_BUNDLED_DEPS=ON \
+    -DBUILD_DRIVER=OFF \
+    -DBUILD_FALCO_MODERN_BPF=ON \
+    -DBUILD_FALCO_UNIT_TESTS=OFF \
+    -DCREATE_TEST_TARGETS=OFF
+
+  # Falco's C++ translation units are memory-heavy, especially with Arch's
+  # default LTO flags. Keep the build bounded so Ninja does not OOM the host;
+  # override with FALCO_BUILD_JOBS when more memory is available.
+  cmake --build "${srcdir}/build" --target falco \
+    --parallel "${FALCO_BUILD_JOBS:-2}"
+}
+
+package() {
+  install -Dm755 "${srcdir}/build/userspace/falco/falco" \
+    "${pkgdir}/usr/bin/falco"
+
+  install -Dm644 "${srcdir}/falco.yaml" \
+    "${pkgdir}/etc/falco/falco.yaml"
+  install -Dm644 "${srcdir}/fenrig-desktop.yaml" \
+    "${pkgdir}/etc/falco/rules.d/fenrig-desktop.yaml"
+  install -Dm644 "${srcdir}/falco.logrotate" \
+    "${pkgdir}/etc/logrotate.d/falco-fenrig"
+  install -dm755 "${pkgdir}/var/log/falco"
+  install -Dm644 "${srcdir}/falco.service" \
+    "${pkgdir}/usr/lib/systemd/system/falco.service"
+}

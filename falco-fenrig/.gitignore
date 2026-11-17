@@ -1,0 +1,11 @@
+# makepkg build directories
+/src/
+/pkg/
+
+# Downloaded source archives and generated packages
+/*.tar.gz
+/*.tar.xz
+/*.tar.zst
+/*.tar.bz2
+/*.zip
+/*.pkg.tar.*
