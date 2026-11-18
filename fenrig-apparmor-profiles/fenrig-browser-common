@@ -83,6 +83,7 @@ owner @{HOME}/.local/share/applications/mimeapps.list r,
 owner @{HOME}/.local/share/applications/mimeinfo.cache r,
 
 /usr/bin/xdg-open ix,
+/usr/bin/plasma-browser-integration-host rix,
 /dev/char/195:* rw,
 owner @{HOME}/.cache/glycin/** rwk,
 

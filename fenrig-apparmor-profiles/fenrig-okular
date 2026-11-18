@@ -6,8 +6,12 @@ profile okular /usr/bin/okular {
   include <abstractions/fenrig-document-common>
   /usr/bin/okular mr,
   /usr/lib/qt6/plugins/** mr,
+  owner @{HOME}/.config/okularpartrc.* rwl,
+  owner @{HOME}/.config/okularpartrc rwk,
+  owner @{HOME}/.config/okularrc.lock rwk,
   owner @{HOME}/.config/okularrc rwk,
   owner @{HOME}/.local/share/okular/** rwk,
+  owner @{HOME}/.local/state/okularstaterc rwk,
   owner @{HOME}/.cache/okular/** rwk,
   include if exists <local/fenrig-okular>
 }

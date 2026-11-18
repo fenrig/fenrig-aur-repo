@@ -6,6 +6,7 @@ include <tunables/global>
 # can read user data, but only the explicit ClamAV state/quarantine roots are
 # writable. Scanning is delegated to the separately confined helper.
 profile fenrig-clamav-scan-gui /usr/bin/clamav-scan-gui {
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/base>
   include <abstractions/audio>
   include <abstractions/video>
@@ -28,8 +29,11 @@ profile fenrig-clamav-scan-gui /usr/bin/clamav-scan-gui {
   /usr/bin/clamav-scan-gui rix,
   /usr/bin/clamav-scan-quarantine-helper rPx -> fenrig-clamav-scan-quarantine-helper,
   /usr/bin/clamav-quarantine-gui rPx -> fenrig-clamav-quarantine-gui,
+  signal send set=(term,kill) peer=fenrig-clamav-scan-quarantine-helper,
   /usr/lib/** mr,
   /usr/share/{,**} r,
+  /etc/clamav/ r,
+  /etc/clamav/** r,
   /etc/{,ssl/} r,
   /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
   /etc/ssl/certs/** r,

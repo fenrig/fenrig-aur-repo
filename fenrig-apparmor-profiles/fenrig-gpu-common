@@ -21,6 +21,8 @@ abi <abi/4.0>,
 @{sys}/class/drm/** r,
 @{sys}/devices/**/drm/ r,
 @{sys}/devices/**/drm/** r,
+@{sys}/devices/pci*/ r,
+@{sys}/devices/pci*/** r,
 @{PROC}/driver/nvidia/version r,
 
 include if exists <local/fenrig-gpu-common>

@@ -24,6 +24,7 @@ profile wine /usr/bin/wine {
 }
 
 profile wine-wineserver /usr/bin/wineserver {
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/base>
   include <abstractions/nameservice>
   /usr/bin/wineserver mr,

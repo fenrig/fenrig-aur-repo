@@ -6,8 +6,12 @@ profile ark /usr/bin/ark {
   include <abstractions/fenrig-document-common>
   /usr/bin/ark mr,
   /usr/lib/qt6/plugins/** mr,
+  /etc/xdg/arkrc r,
   owner @{HOME}/.config/arkrc rwk,
   owner @{HOME}/.cache/ark/** rwk,
+  owner @{HOME}/.local/state/arkstaterc rwk,
+  owner @{HOME}/.local/share/ark/ r,
+  owner @{HOME}/.local/share/ark/ark_recentfiles rwk,
   owner @{HOME}/Documents/** rwk,
   owner @{HOME}/Downloads/** rwk,
   owner @{HOME}/Desktop/** rwk,

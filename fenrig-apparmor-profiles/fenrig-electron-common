@@ -1,5 +1,6 @@
 # vim:syntax=apparmor
 abi <abi/4.0>,
+include <abstractions/cups-client>
 
 include <abstractions/base>
 include <abstractions/audio>

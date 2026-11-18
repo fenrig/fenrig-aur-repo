@@ -3,6 +3,7 @@ abi <abi/4.0>,
 include <tunables/global>
 
 profile fenrig-clamav-native /usr/libexec/clamav/clamav-thunderbird-host {
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/base>
   include <abstractions/nameservice>
   include <abstractions/openssl>
@@ -10,6 +11,8 @@ profile fenrig-clamav-native /usr/libexec/clamav/clamav-thunderbird-host {
   # open_quarantine launches only the dedicated viewer under its own profile.
   /usr/bin/clamav-quarantine-gui rPx -> fenrig-clamav-quarantine-gui,
   /usr/lib/** mr,
+  /etc/clamav/ r,
+  /etc/clamav/** r,
   /etc/clamav/clamd.conf r,
   /run/clamav/clamd.ctl rw,
   # The browser passes files by pathname. Permit the bridge to remove or

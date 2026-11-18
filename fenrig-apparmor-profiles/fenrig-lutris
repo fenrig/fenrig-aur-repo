@@ -3,6 +3,7 @@ abi <abi/4.0>,
 include <tunables/global>
 
 profile lutris /usr/bin/lutris {
+  ptrace (read) peer=unconfined,
   include <abstractions/fenrig-removable-common>
   include <abstractions/fenrig-kde-state-common>
   include <abstractions/fenrig-gpu-common>

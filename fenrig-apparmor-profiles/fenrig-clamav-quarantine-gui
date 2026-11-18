@@ -6,6 +6,7 @@ include <tunables/global>
 # open_quarantine command.  Keep the viewer separate from the bridge so its
 # Qt/desktop access cannot become an arbitrary helper-execution permission.
 profile fenrig-clamav-quarantine-gui /usr/bin/clamav-quarantine-gui {
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/base>
   include <abstractions/audio>
   include <abstractions/video>
@@ -29,6 +30,8 @@ profile fenrig-clamav-quarantine-gui /usr/bin/clamav-quarantine-gui {
   /usr/bin/clamav-quarantine-gui rix,
   /usr/lib/** mr,
   /usr/share/{,**} r,
+  /etc/clamav/ r,
+  /etc/clamav/** r,
   /etc/{,ssl/} r,
   /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
   /etc/ssl/certs/** r,

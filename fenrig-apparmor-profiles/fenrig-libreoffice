@@ -4,6 +4,17 @@ include <tunables/global>
 
 profile libreoffice /usr/lib/libreoffice/program/soffice.bin {
   include <abstractions/fenrig-document-common>
+  /etc/libreoffice/ r,
+  /etc/libreoffice/** r,
+  /etc/{libreoffice/{bootstraprc,psprint.conf,sofficerc},paperspecs} r,
+  /usr/bin/{bash,gpg,gpgconf,gpgsm,paperconf} rix,
+  owner @{HOME}/.thunderbird/profiles.ini r,
+  owner @{HOME}/.thunderbird/{cert9.db,pkcs11.txt} rwk,
+  owner @{HOME}/.thunderbird/**/{cert9.db,pkcs11.txt} rwk,
+  owner @{HOME}/.thunderbird/**/key4.db rwk,
+  owner @{HOME}/.mozilla/firefox/profiles.ini r,
+  owner @{HOME}/{Templates,Sjablonen}/ r,
+  owner @{HOME}/{Templates,Sjablonen}/** r,
   /usr/lib/libreoffice/** mr,
   deny /usr/lib/libreoffice/** w,
   owner @{HOME}/.config/libreoffice/** rwk,

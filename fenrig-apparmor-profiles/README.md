@@ -35,6 +35,21 @@ Wayland proxy, bubblewrap/Glycin, hardware-probing, and overflow-ID reads to
 Firefox, Thunderbird, Chromium/Chrome/Electron-family applications, and the
 document/media policies. Application-specific data rules remain separate.
 
+All covered applications may read user-owned home-directory contents for
+desktop indexing, archive inspection, file pickers, and helper discovery. The
+explicit sensitive-directory and shell-startup-file denials still take
+precedence over that common read allowance; write access remains
+profile-specific.
+
+All packaged profiles also include a read-only runtime abstraction. It permits
+same-user `/proc/<pid>` inspection, `/proc/net/if_inet6`, cgroup `cpu.max` and
+`memory.max`, and hugepage metadata. These are runtime and resource-discovery
+interfaces; no cgroup control or process-credential access is granted. The
+LibreOffice policy additionally covers its installed startup/printing files,
+`/etc/paperspecs`, the observed Thunderbird profile metadata, and the named
+printing/crypto helper programs under the existing LibreOffice confinement.
+Electron-family profiles include the standard local CUPS client abstraction.
+
 AppArmor mediates canonical paths rather than the symlink spelling used by the
 desktop. The current pilot machine maps `~/Downloads` to
 `/mnt/multi/Downloads` and `~/Music` to `/mnt/multi/Music`; those observed

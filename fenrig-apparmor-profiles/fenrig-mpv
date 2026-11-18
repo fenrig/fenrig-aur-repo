@@ -4,6 +4,7 @@ include <tunables/global>
 
 profile mpv /usr/bin/mpv {
   include <abstractions/fenrig-removable-common>
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/fenrig-kde-state-common>
   include <abstractions/fenrig-gpu-common>
   include <abstractions/base>
@@ -69,6 +70,7 @@ profile mpv /usr/bin/mpv {
 
   /usr/bin/yt-dlp rPx -> mpv//yt-dlp,
   profile mpv//yt-dlp /usr/bin/yt-dlp {
+    include <abstractions/fenrig-runtime-common>
     include <abstractions/base>
     include <abstractions/nameservice>
     include <abstractions/openssl>

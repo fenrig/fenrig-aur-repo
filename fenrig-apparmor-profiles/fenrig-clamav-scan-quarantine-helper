@@ -7,13 +7,17 @@ include <tunables/global>
 # FILDES. Read-only user-data access is therefore intentional here; writes
 # remain limited to ClamAV quarantine/state locations.
 profile fenrig-clamav-scan-quarantine-helper /usr/bin/clamav-scan-quarantine-helper {
+  include <abstractions/fenrig-runtime-common>
   include <abstractions/base>
   include <abstractions/nameservice>
   include <abstractions/openssl>
   /usr/bin/clamav-scan-quarantine-helper mr,
+  signal receive set=(term,kill) peer=fenrig-clamav-scan-gui,
   /usr/bin/clamscan ix,
   /usr/lib/** mr,
   /etc/{,ssl/} r,
+  /etc/clamav/ r,
+  /etc/clamav/** r,
   /etc/{clamd.conf,clamav/clamd.conf,hosts,resolv.conf,nsswitch.conf,localtime,timezone} r,
   /etc/ssl/certs/** r,
   /run/clamav/clamd.ctl rw,
