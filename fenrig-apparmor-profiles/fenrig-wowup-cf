@@ -4,11 +4,24 @@ include <tunables/global>
 
 profile wowup-cf /opt/wowup-cf/wowup-cf {
   include <abstractions/fenrig-electron-common>
+  # This bundled Electron build requests CAP_SYS_ADMIN while initializing its
+  # Chromium sandbox. Keep the allowance profile-specific; do not propagate it
+  # to unrelated Electron applications.
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+  /usr/bin/bash ix,
   /opt/wowup-cf/** ixr,
   owner @{HOME}/.config/wowup-cf/** rwk,
   owner @{HOME}/.cache/wowup-cf/** rwk,
   owner @{HOME}/.local/share/wowup-cf/** rwk,
   owner @{HOME}/.config/WowUp-CF/** rwk,
   owner @{HOME}/.cache/WowUp-CF/** rwk,
+  owner @{HOME}/.config/WowUpCf/ rwkl,
+  owner @{HOME}/.config/WowUpCf/** rwkl,
+  owner @{HOME}/.cache/WowUpCf/ rwkl,
+  owner @{HOME}/.cache/WowUpCf/** rwkl,
+  owner @{HOME}/.config/ow-electron/ rwkl,
+  owner @{HOME}/.config/ow-electron/** rwkl,
   include if exists <local/fenrig-wowup-cf>
 }

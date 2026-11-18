@@ -5,6 +5,7 @@ abi <abi/4.0>,
 # their sandboxes. The PROC rule is owner-scoped; cgroup and kernel metadata
 # are non-secret system state and are read-only.
 owner @{PROC}/@{pid}/** r,
+owner @{PROC}/@{pid}/task/**/comm w,
 owner @{PROC}/@{pid}/{uid_map,gid_map,setgroups} rw,
 owner @{PROC}/@{pid}/coredump_filter w,
 /proc/net/if_inet6 r,

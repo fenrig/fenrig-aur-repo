@@ -315,6 +315,18 @@ the installed `/usr/lib/electron44/electron` ABI and applies to every app
 using that runtime. A future Electron version or an app-bundled runtime needs
 a new exact profile and validation.
 
+WoWUp-CF's bundled Electron build currently requests `CAP_SYS_ADMIN`,
+`CAP_SYS_CHROOT`, and `CAP_SYS_PTRACE` while
+initializing its Chromium sandbox. The package grants that capability only to
+the `wowup-cf` profile so that it does not become a permission of the shared
+Electron abstraction or unrelated Electron applications. This is a deliberate
+compatibility trade-off and weakens the WoWUp profile relative to a build that
+does not make that request; revisit it when the WoWUp/Electron bundle changes.
+The bundle also invokes `/bin/sh` to derive its machine identifier, so Bash is
+executed inside the WoWUp confinement rather than transitioned to unconfined.
+The shared Electron abstraction also permits read-only access to `/proc/` and
+the kernel inotify watch limit, which are startup/runtime introspection only.
+
 Mumble has explicit TCP/UDP network and audio allowances, but its game
 integration plugins may legitimately need access to game processes or memory;
 those are not granted by this profile.
