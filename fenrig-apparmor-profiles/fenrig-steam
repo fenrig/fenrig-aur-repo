@@ -1,0 +1,22 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Replaces Arch's package-owned unconfined profile named steam. The launcher
+# and Steam's runtime need broad child execution for Proton and games.
+profile steam /usr/{lib/steam/bin_steam.sh,games/steam} {
+  include <abstractions/fenrig-compat-common>
+  /usr/lib/steam/** ixr,
+  /usr/lib/steam/steam-runtime/** ixr,
+  /usr/bin/gamemoderun rix,
+  /usr/bin/bash rix,
+  /usr/bin/env ix,
+  /usr/bin/xrandr ix,
+  owner @{HOME}/.steam/** rwkix,
+  owner @{HOME}/.local/share/Steam/** rwkix,
+  owner @{HOME}/Steam/** rwkix,
+  owner @{HOME}/.config/steam/** rwk,
+  owner @{HOME}/.cache/steam/** rwk,
+  owner @{HOME}/Games/** rwkix,
+  include if exists <local/fenrig-steam>
+}

@@ -1,0 +1,15 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Matches the apparmor package's unconfined profile name. The package-owned
+# file is loaded with --replace; /etc/apparmor.d/firefox is never overwritten.
+profile firefox /usr/lib/firefox/firefox {
+  include <abstractions/fenrig-browser-common>
+  /usr/lib/firefox/firefox rix,
+  /usr/lib/firefox/{crashhelper,gfxtest,plugin-container} rix,
+  /usr/lib/firefox/** mr,
+  deny /usr/lib/firefox/** w,
+  /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
+  include if exists <local/fenrig-firefox>
+}

@@ -1,0 +1,14 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Optional: Discord is not installed on the build host, but Arch's profile
+# reserves this executable path.
+profile Discord /usr/share/discord/Discord {
+  include <abstractions/fenrig-electron-common>
+  /usr/share/discord/** ixr,
+  owner @{HOME}/.config/discord/** rwk,
+  owner @{HOME}/.cache/discord/** rwk,
+  owner @{HOME}/.local/share/discord/** rwk,
+  include if exists <local/fenrig-discord>
+}

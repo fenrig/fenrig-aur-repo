@@ -1,0 +1,125 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# Common KDE/Qt desktop access for document and media applications. These
+# rules are intentionally narrower than the browser policy's application data
+# rules and do not grant arbitrary home-directory access or execution.
+include <abstractions/base>
+include <abstractions/audio>
+include <abstractions/video>
+include <abstractions/wayland>
+include <abstractions/fonts>
+include <abstractions/mesa>
+include <abstractions/vulkan>
+include <abstractions/nameservice>
+include <abstractions/openssl>
+include <abstractions/p11-kit>
+include <abstractions/cups-client>
+include <abstractions/dbus-session-strict>
+include <abstractions/dbus-accessibility-strict>
+include <abstractions/dconf>
+include <abstractions/kde>
+include <abstractions/xdg-open>
+include <abstractions/dbus-accessibility>
+include if exists <local/fenrig-xdg-open>
+include <abstractions/fenrig-sandbox-common>
+include <abstractions/fenrig-removable-common>
+include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-gpu-common>
+include <abstractions/fenrig-tablet-common>
+
+/etc/{,ssl/} r,
+/etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+/etc/fstab r,
+/etc/ssl/certs/** r,
+/usr/lib/** mr,
+/usr/share/{,**} r,
+/usr/share/fonts/** r,
+/usr/share/mime/** r,
+/usr/share/applications/** r,
+/usr/share/icons/** r,
+/usr/share/locale/** r,
+/ r,
+/var/cache/fontconfig/ r,
+/var/cache/fontconfig/** r,
+/sys/{bus,class}/ r,
+/sys/{bus,class}/** r,
+/run/udev/data/** r,
+network unix stream,
+network unix dgram,
+userns,
+owner @{PROC}/@{pid}/** r,
+owner @{PROC}/@{pid}/oom_score_adj w,
+owner /{dev,run,var/run}/shm/** rwk,
+owner /tmp/** rwk,
+owner /var/tmp/** rwk,
+owner /run/user/*/*.kioworker.socket l,
+owner /run/user/*/*.kioworker.socket rwk,
+owner /run/user/*/ rw,
+owner /run/user/*/#* rwk,
+
+# KDE file chooser/KIO desktop state and thumbnail cache. The #* rule covers
+# the short-lived atomic-replacement files used when updating bookmarks.
+owner @{HOME}/.config/kcminputrc r,
+owner @{HOME}/.config/kdedefaults/ r,
+owner @{HOME}/.config/kdedefaults/** r,
+owner @{HOME}/.cache/thumbnails/ r,
+owner @{HOME}/.cache/thumbnails/** rwk,
+owner @{HOME}/.local/share/ r,
+owner @{HOME}/.local/share/user-places.xbel rwk,
+owner @{HOME}/.local/share/#* rwk,
+owner @{HOME}/.local/share/recently-used.xbel rwk,
+owner @{HOME}/.local/share/recently-used.xbel.lock rwk,
+owner @{HOME}/.local/state/ rw,
+owner @{HOME}/.local/state/#* rwk,
+owner @{HOME}/.local/share/baloo/ r,
+owner @{HOME}/.local/share/baloo/** r,
+owner @{HOME}/.config/QtProject.conf rwk,
+owner @{HOME}/.config/fontconfig/ r,
+owner @{HOME}/.config/fontconfig/** r,
+owner @{HOME}/.cache/fontconfig/ rw,
+owner @{HOME}/.cache/fontconfig/** rwk,
+
+# User-selected document/media roots. Portal file descriptors can still be
+# used for paths outside these roots when the desktop portal supplies them.
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner @{HOME}/Videos/ r,
+owner @{HOME}/Videos/** r,
+owner @{HOME}/Video's/ r,
+owner @{HOME}/Video's/** r,
+owner @{HOME}/Music/ r,
+owner @{HOME}/Music/** r,
+owner @{HOME}/Muziek/ r,
+owner @{HOME}/Muziek/** r,
+owner /mnt/multi/Music/ r,
+owner /mnt/multi/Music/** r,
+owner /mnt/multi/Muziek/ r,
+owner /mnt/multi/Muziek/** r,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner /mnt/multi/Video's/ r,
+owner /mnt/multi/Video's/** r,
+owner @{HOME}/Downloads/ r,
+owner @{HOME}/Downloads/** rwk,
+owner /mnt/multi/Downloads/ r,
+owner /mnt/multi/Downloads/** rwk,
+owner /mnt/multi/Openbaar/ r,
+owner /mnt/multi/Openbaar/** r,
+owner @{HOME}/Public/ r,
+owner @{HOME}/Public/** r,
+
+/usr/bin/xdg-open ix,
+# KIO workers are separate helper processes started by KDE/Qt applications.
+# Inherit this profile rather than granting arbitrary helper execution.
+/usr/lib/kf6/kioworker ix,
+/usr/lib/kf6/kioexec ix,
+
+deny @{HOME}/.ssh/** r,
+deny @{HOME}/.gnupg/** r,
+deny @{HOME}/.aws/** r,
+deny @{HOME}/.kube/** r,
+deny @{HOME}/.bashrc w,
+deny @{HOME}/.profile w,
+deny @{HOME}/.xonshrc r,
+deny @{HOME}/.xonshrc w,

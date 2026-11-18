@@ -1,0 +1,13 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Evince is optional on the target fleet; this exact attachment is included
+# for systems that install /usr/bin/evince.
+profile evince /usr/bin/evince {
+  include <abstractions/fenrig-document-common>
+  /usr/bin/evince mr,
+  owner @{HOME}/.config/evince/** rwk,
+  owner @{HOME}/.cache/evince/** rwk,
+  include if exists <local/fenrig-evince>
+}

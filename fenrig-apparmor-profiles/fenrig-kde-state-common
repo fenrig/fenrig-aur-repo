@@ -1,0 +1,8 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# KDE applications use this directory for atomic configuration updates and
+# shared KIO settings. Directory rw does not grant read/write access to every
+# file below it; application-specific data rules remain explicit.
+owner @{HOME}/.config/ rw,
+owner @{HOME}/.config/kioslaverc rwk,

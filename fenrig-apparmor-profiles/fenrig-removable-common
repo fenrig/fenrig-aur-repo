@@ -1,0 +1,11 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# User-mounted filesystems. These locations are intentionally broad enough for
+# normal save/copy/export operations, but do not include /media, /sys, /dev,
+# or arbitrary host paths. Unix mount permissions and desktop mount policy
+# still apply.
+/mnt/ r,
+/mnt/** rwk,
+/run/media/ r,
+/run/media/** rwk,

@@ -1,0 +1,21 @@
+# vim:syntax=apparmor
+# Wacom/libinput tablet support for desktop applications.
+#
+# AppArmor cannot distinguish a Wacom event node from another input event
+# node by pathname.  This abstraction therefore grants the normal libinput
+# event/sysfs access, plus raw HID access for tablet control interfaces.  It
+# is deliberately not included in the browser family: Wayland browsers use
+# compositor-mediated pointer events and should not receive raw HID access.
+abi <abi/4.0>,
+
+/dev/input/ r,
+/dev/input/event[0-9]* rw,
+/dev/hidraw[0-9]* rw,
+@{sys}/class/input/ r,
+@{sys}/class/input/** r,
+@{sys}/devices/**/input/ r,
+@{sys}/devices/**/input/** r,
+/usr/share/libwacom/ r,
+/usr/share/libwacom/** r,
+
+include if exists <local/fenrig-tablet-common>

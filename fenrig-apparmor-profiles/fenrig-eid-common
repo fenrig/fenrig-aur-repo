@@ -1,0 +1,14 @@
+# vim:syntax=apparmor
+# Belgian eID middleware used by Firefox/Thunderbird through PKCS#11.
+# The card is accessed through pcscd; applications do not need raw USB access.
+abi <abi/4.0>,
+
+/run/pcscd/pcscd.comm rw,
+/var/run/pcscd/pcscd.comm rw,
+/usr/lib/libbeidpkcs11.so* mr,
+/usr/lib/pkcs11/beidpkcs11.so mr,
+/usr/lib/mozilla/pkcs11-modules/beidpkcs11*.json r,
+/usr/share/p11-kit/modules/beid.module r,
+/usr/share/eid-mw/** r,
+
+include if exists <local/fenrig-eid-common>

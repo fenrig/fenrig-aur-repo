@@ -1,0 +1,16 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile libreoffice /usr/lib/libreoffice/program/soffice.bin {
+  include <abstractions/fenrig-document-common>
+  /usr/lib/libreoffice/** mr,
+  deny /usr/lib/libreoffice/** w,
+  owner @{HOME}/.config/libreoffice/** rwk,
+  owner @{HOME}/.cache/libreoffice/** rwk,
+  owner @{HOME}/.config/qt6ct/qt6ct.conf r,
+  owner @{HOME}/Documents/** rwk,
+  owner @{HOME}/Downloads/** rwk,
+  owner @{HOME}/Desktop/** rwk,
+  include if exists <local/fenrig-libreoffice>
+}

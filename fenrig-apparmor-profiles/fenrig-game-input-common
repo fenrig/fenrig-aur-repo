@@ -1,0 +1,16 @@
+# vim:syntax=apparmor
+# Game-controller access for Steam/Proton, Lutris and Wine. event* is needed
+# by SDL/gamepad APIs; js* supports the legacy joystick API. uinput is needed
+# by Steam Input and other virtual-controller implementations.
+abi <abi/4.0>,
+
+/dev/input/ r,
+/dev/input/event[0-9]* rw,
+/dev/input/js[0-9]* rw,
+/dev/uinput rw,
+@{sys}/class/input/ r,
+@{sys}/class/input/** r,
+@{sys}/devices/**/input/ r,
+@{sys}/devices/**/input/** r,
+
+include if exists <local/fenrig-game-input-common>

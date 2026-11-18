@@ -1,0 +1,54 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# clamav-scan-gui passes user-selected pathnames to this helper. The helper
+# opens each regular file itself, then passes the descriptor to clamd using
+# FILDES. Read-only user-data access is therefore intentional here; writes
+# remain limited to ClamAV quarantine/state locations.
+profile fenrig-clamav-scan-quarantine-helper /usr/bin/clamav-scan-quarantine-helper {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  /usr/bin/clamav-scan-quarantine-helper mr,
+  /usr/bin/clamscan ix,
+  /usr/lib/** mr,
+  /etc/{,ssl/} r,
+  /etc/{clamd.conf,clamav/clamd.conf,hosts,resolv.conf,nsswitch.conf,localtime,timezone} r,
+  /etc/ssl/certs/** r,
+  /run/clamav/clamd.ctl rw,
+  /dev/null rw,
+  /proc/ r,
+  owner @{PROC}/@{pid}/** r,
+  owner /tmp/** rwk,
+
+  # The helper must be able to scan arbitrary user-selected files, but it
+  # must not read the most sensitive credential/key stores.
+  owner @{HOME}/ r,
+  owner @{HOME}/** r,
+  owner /mnt/multi/ r,
+  owner /mnt/multi/** r,
+  owner /run/media/ r,
+  owner /run/media/** r,
+  owner @{HOME}/.local/share/clamav/ rw,
+  owner @{HOME}/.local/share/clamav/quarantine/ rw,
+  owner @{HOME}/.local/share/clamav/quarantine/** rwkl,
+  owner @{HOME}/.local/state/clamav/ rw,
+  owner @{HOME}/.local/state/clamav/** rwk,
+  owner @{HOME}/.config/clamav/ rw,
+  owner @{HOME}/.config/clamav/** rwk,
+  owner @{HOME}/.cache/clamav/ rw,
+  owner @{HOME}/.cache/clamav/** rwk,
+
+  deny @{HOME}/.ssh/** r,
+  deny @{HOME}/.gnupg/** r,
+  deny @{HOME}/.aws/** r,
+  deny @{HOME}/.kube/** r,
+  deny @{HOME}/.config/** r,
+  deny @{HOME}/.local/share/** r,
+  deny @{HOME}/.local/state/** r,
+  deny @{HOME}/.bashrc r,
+  deny @{HOME}/.profile r,
+  deny @{HOME}/.xonshrc r,
+  include if exists <local/fenrig-clamav-scan-quarantine-helper>
+}

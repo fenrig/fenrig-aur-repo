@@ -1,0 +1,115 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile mpv /usr/bin/mpv {
+  include <abstractions/fenrig-removable-common>
+  include <abstractions/fenrig-kde-state-common>
+  include <abstractions/fenrig-gpu-common>
+  include <abstractions/base>
+  include <abstractions/audio>
+  include <abstractions/video>
+  include <abstractions/wayland>
+  include <abstractions/fonts>
+  include <abstractions/mesa>
+  include <abstractions/vulkan>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  include <abstractions/p11-kit>
+  include <abstractions/dbus-session-strict>
+  include <abstractions/dconf>
+  include <abstractions/kde>
+
+  network inet stream,
+  network inet6 stream,
+  network inet dgram,
+  network inet6 dgram,
+
+  /etc/{,ssl/} r,
+  /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types} r,
+  /etc/ssl/certs/** r,
+  /usr/bin/mpv mr,
+  /usr/lib/** mr,
+  /usr/share/{,**} r,
+  /usr/share/mpv/** r,
+  /usr/share/fonts/** r,
+  /usr/share/mime/** r,
+  /usr/share/icons/** r,
+
+  userns,
+  owner @{PROC}/@{pid}/** r,
+  owner @{PROC}/@{pid}/oom_score_adj w,
+  owner /{dev,run,var/run}/shm/** rwk,
+  owner /tmp/** rwk,
+  owner /var/tmp/** rwk,
+
+  owner @{HOME}/.config/mpv/** rwk,
+  owner @{HOME}/.local/share/mpv/** rwk,
+  owner @{HOME}/.cache/mpv/** rwk,
+  owner @{HOME}/.cache/yt-dlp/** rwk,
+  owner @{HOME}/.config/yt-dlp/** rwk,
+  owner @{HOME}/.config/gtk-3.0/bookmarks r,
+  owner @{HOME}/.local/share/applications/mimeapps.list r,
+  owner @{HOME}/.local/share/applications/mimeinfo.cache r,
+
+  owner @{HOME}/Downloads/ r,
+  owner @{HOME}/Downloads/** r,
+  owner @{HOME}/Documents/ r,
+  owner @{HOME}/Documents/** r,
+  owner @{HOME}/Music/ r,
+  owner @{HOME}/Music/** r,
+  owner @{HOME}/Pictures/ r,
+  owner @{HOME}/Pictures/** r,
+  owner @{HOME}/Videos/ r,
+  owner @{HOME}/Videos/** r,
+  owner @{HOME}/Public/ r,
+  owner @{HOME}/Public/** r,
+  owner @{HOME}/Pictures/mpv/ rw,
+  owner @{HOME}/Pictures/mpv/** rwk,
+
+  /usr/bin/yt-dlp rPx -> mpv//yt-dlp,
+  profile mpv//yt-dlp /usr/bin/yt-dlp {
+    include <abstractions/base>
+    include <abstractions/nameservice>
+    include <abstractions/openssl>
+    network inet stream,
+    network inet6 stream,
+    network inet dgram,
+    network inet6 dgram,
+    /usr/bin/yt-dlp r,
+    /usr/bin/python* rix,
+    /usr/lib/python*/** r,
+    /usr/lib/** mr,
+    /etc/{,ssl/} r,
+    /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone} r,
+    /etc/ssl/certs/** r,
+    owner @{HOME}/.cache/yt-dlp/** rwk,
+    owner @{HOME}/.config/yt-dlp/** rwk,
+    owner @{HOME}/Downloads/** rwk,
+    owner /tmp/** rwk,
+    owner /var/tmp/** rwk,
+    deny @{HOME}/.ssh/** r,
+    deny @{HOME}/.gnupg/** r,
+    deny @{HOME}/.aws/** r,
+    deny @{HOME}/.kube/** r,
+    deny @{HOME}/.config/mozilla/** r,
+    deny @{HOME}/.thunderbird/** r,
+    deny @{HOME}/.config/google-chrome/** r,
+    deny @{HOME}/.config/chromium/** r,
+    include if exists <local/fenrig-mpv-yt-dlp>
+  }
+
+  deny @{HOME}/.ssh/** r,
+  deny @{HOME}/.gnupg/** r,
+  deny @{HOME}/.aws/** r,
+  deny @{HOME}/.kube/** r,
+  deny @{HOME}/.config/mozilla/** r,
+  deny @{HOME}/.thunderbird/** r,
+  deny @{HOME}/.config/google-chrome/** r,
+  deny @{HOME}/.config/chromium/** r,
+  deny @{HOME}/.bashrc w,
+  deny @{HOME}/.profile w,
+  deny @{HOME}/.xonshrc r,
+  deny @{HOME}/.xonshrc w,
+  include if exists <local/fenrig-mpv>
+}

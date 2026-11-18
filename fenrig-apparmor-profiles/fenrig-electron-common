@@ -1,0 +1,71 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+include <abstractions/base>
+include <abstractions/audio>
+include <abstractions/video>
+include <abstractions/wayland>
+include <abstractions/fonts>
+include <abstractions/mesa>
+include <abstractions/vulkan>
+include <abstractions/nameservice>
+include <abstractions/openssl>
+include <abstractions/p11-kit>
+include <abstractions/dbus-session-strict>
+include <abstractions/dbus-accessibility-strict>
+include <abstractions/dconf>
+include <abstractions/kde>
+include <abstractions/xdg-open>
+include <abstractions/dbus-accessibility>
+include if exists <local/fenrig-xdg-open>
+include <abstractions/fenrig-sandbox-common>
+include <abstractions/fenrig-removable-common>
+include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-gpu-common>
+include <abstractions/fenrig-tablet-common>
+
+/etc/{,ssl/} r,
+/etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+/etc/ssl/certs/** r,
+/usr/share/{,**} r,
+/usr/share/fonts/** r,
+/usr/share/mime/** r,
+/usr/share/applications/** r,
+/usr/share/icons/** r,
+/usr/share/locale/** r,
+network inet stream,
+network inet6 stream,
+network inet dgram,
+network inet6 dgram,
+userns,
+owner @{PROC}/@{pid}/** r,
+owner @{PROC}/@{pid}/oom_score_adj w,
+owner /{dev,run,var/run}/shm/** rwk,
+owner /tmp/** rwk,
+owner /var/tmp/** rwk,
+
+# Electron/Chromium application state is app-specific below. These common
+# roots are only the explicit user exchange locations.
+owner @{HOME}/Downloads/ r,
+owner @{HOME}/Downloads/** rwk,
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner /mnt/multi/Downloads/ r,
+owner /mnt/multi/Downloads/** rwk,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner /mnt/multi/Openbaar/ r,
+owner /mnt/multi/Openbaar/** r,
+owner @{HOME}/Public/ r,
+owner @{HOME}/Public/** r,
+
+/usr/bin/xdg-open ix,
+
+deny @{HOME}/.ssh/** r,
+deny @{HOME}/.gnupg/** r,
+deny @{HOME}/.aws/** r,
+deny @{HOME}/.kube/** r,
+deny @{HOME}/.bashrc w,
+deny @{HOME}/.profile w,
+deny @{HOME}/.xonshrc r,
+deny @{HOME}/.xonshrc w,

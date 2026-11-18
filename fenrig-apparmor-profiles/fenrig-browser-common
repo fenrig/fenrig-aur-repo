@@ -1,0 +1,95 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <abstractions/base>
+include <abstractions/audio>
+include <abstractions/video>
+include <abstractions/wayland>
+include <abstractions/fonts>
+include <abstractions/mesa>
+include <abstractions/vulkan>
+include <abstractions/nameservice>
+include <abstractions/openssl>
+include <abstractions/p11-kit>
+include <abstractions/cups-client>
+include <abstractions/dbus-session-strict>
+include <abstractions/dbus-accessibility-strict>
+include <abstractions/dconf>
+include <abstractions/kde>
+include <abstractions/xdg-open>
+include <abstractions/dbus-accessibility>
+include if exists <local/fenrig-xdg-open>
+include <abstractions/fenrig-sandbox-common>
+include <abstractions/fenrig-removable-common>
+include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-gpu-common>
+include <abstractions/fenrig-eid-common>
+
+/etc/{,ssl/} r,
+/etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+/etc/ssl/certs/** r,
+/usr/lib/** mr,
+/usr/share/{,**} r,
+/usr/share/fonts/** r,
+/usr/share/mime/** r,
+/usr/share/applications/** r,
+/usr/share/icons/** r,
+/usr/share/locale/** r,
+
+capability sys_admin,
+capability sys_chroot,
+owner @{PROC}/@{pid}/** r,
+owner @{PROC}/@{pid}/oom_score_adj w,
+owner /{dev,run,var/run}/shm/{shmfd-*,org.mozilla.*,wayland.mozilla.ipc.*} rwk,
+owner /run/user/*/iceauth_* r,
+owner /tmp/** rwk,
+owner /var/tmp/** rwk,
+/sys/fs/cgroup/**/cpu.max r,
+/ r,
+
+# Firefox/Thunderbird users may choose arbitrary save locations. This is
+# intentionally broad for browser file workflows; sensitive credential and
+# shell paths remain denied below.
+owner @{HOME}/ rw,
+owner @{HOME}/** rwk,
+owner /mnt/multi/ rw,
+owner /mnt/multi/** rwk,
+owner /run/media/ rw,
+owner /run/media/** rwk,
+
+owner @{HOME}/.mozilla/ rw,
+owner @{HOME}/.mozilla/** rwk,
+owner @{HOME}/.cache/mozilla/ rw,
+owner @{HOME}/.cache/mozilla/** rwk,
+owner @{HOME}/.cache/glycin/ rw,
+owner @{HOME}/.cache/glycin/** rwk,
+owner @{HOME}/.config/mozilla/ rw,
+owner @{HOME}/.config/mozilla/** rwk,
+owner @{HOME}/.config/gtk-3.0/ r,
+owner @{HOME}/.config/gtk-3.0/** r,
+owner @{HOME}/Downloads/ r,
+owner @{HOME}/Downloads/** rwk,
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner @{HOME}/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner /mnt/multi/Downloads/ r,
+owner /mnt/multi/Downloads/** rwk,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/ rw,
+owner /mnt/multi/{Documents,Documenten,Pictures,Afbeeldingen,Desktop,Bureaublad}/** rwk,
+owner /mnt/multi/Openbaar/ r,
+owner /mnt/multi/Openbaar/** r,
+owner @{HOME}/Public/ r,
+owner @{HOME}/Public/** r,
+owner @{HOME}/.config/gtk-3.0/bookmarks r,
+owner @{HOME}/.local/share/applications/mimeapps.list r,
+owner @{HOME}/.local/share/applications/mimeinfo.cache r,
+
+/usr/bin/xdg-open ix,
+/dev/char/195:* rw,
+owner @{HOME}/.cache/glycin/** rwk,
+
+deny @{HOME}/.ssh/** rw,
+deny @{HOME}/.gnupg/** rw,
+deny @{HOME}/.aws/** rw,
+deny @{HOME}/.kube/** rw,
+deny @{HOME}/.bashrc rw,
+deny @{HOME}/.profile rw,
+deny @{HOME}/.xonshrc rw,

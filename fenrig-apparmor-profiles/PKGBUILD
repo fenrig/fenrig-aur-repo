@@ -1,0 +1,161 @@
+# Maintainer: Fenrig
+pkgname=fenrig-apparmor-profiles
+pkgver=0.1.0
+pkgrel=57
+pkgdesc='Restrictive AppArmor policies for common Plasma desktop applications'
+arch=('any')
+url='https://github.com/fenrig/fenrig-aur-repo'
+license=('MIT')
+depends=('apparmor')
+optdepends=(
+  'firefox: browser executable covered by the Firefox policy'
+  'thunderbird: mail client executable covered by the Thunderbird policy'
+  'eid-mw: Belgian eID PKCS#11 middleware for Firefox/Thunderbird smart cards'
+  'pcsclite: PC/SC daemon used by the Belgian eID middleware'
+  'clamav-lazy: ClamAV native-messaging scanner integration'
+  'libreoffice-fresh: office executable covered by the LibreOffice policy'
+  'evince: optional PDF viewer executable covered by the Evince policy'
+  'gwenview: image viewer executable covered by the Gwenview policy'
+  'okular: document viewer executable covered by the Okular policy'
+  'ark: archive manager executable covered by the Ark policy'
+  'spectacle: screenshot application executable covered by the Spectacle policy'
+  'chromium: Chromium executable covered by the Chromium policy'
+  'google-chrome: Google Chrome executable covered by the Chrome policy'
+  'wowup-cf-bin: WoWUp-CF executable covered by the WoWUp policy'
+  'mumble: Mumble executable covered by the Mumble policy'
+  'transmission-qt: optional Qt torrent client executable covered by the Transmission policy'
+  'mpv: mpv media player executable covered by the mpv policy'
+  'yt-dlp: YouTube and other video-site extraction helper used by mpv'
+  'lutris: broad Lutris game launcher and runtime policy'
+  'electron: optional system Electron runtime policy; applies to all apps using that runtime'
+  'discord: optional Discord executable policy'
+  'steam: broad compatibility profile for the Steam client and Proton games'
+  'wine-staging: broad compatibility profile for Wine applications'
+)
+install='fenrig-apparmor-profiles.install'
+source=(
+  'fenrig-firefox'
+  'fenrig-thunderbird'
+  'fenrig-libreoffice'
+  'fenrig-evince'
+  'fenrig-gwenview'
+  'fenrig-okular'
+  'fenrig-ark'
+  'fenrig-spectacle'
+  'fenrig-chromium'
+  'fenrig-chrome'
+  'fenrig-wowup-cf'
+  'fenrig-mumble'
+  'fenrig-transmission-qt'
+  'fenrig-mpv'
+  'fenrig-lutris'
+  'fenrig-electron'
+  'fenrig-discord'
+  'fenrig-steam'
+  'fenrig-wine'
+  'fenrig-browser-common'
+  'fenrig-sandbox-common'
+  'fenrig-removable-common'
+  'fenrig-kde-state-common'
+  'fenrig-document-common'
+  'fenrig-electron-common'
+  'fenrig-compat-common'
+  'fenrig-gpu-common'
+  'fenrig-gpu-wrappers-common'
+  'fenrig-game-input-common'
+  'fenrig-eid-common'
+  'fenrig-tablet-common'
+  'fenrig-clamav-native'
+  'fenrig-clamav-quarantine-gui'
+  'fenrig-clamav-scan-gui'
+  'fenrig-clamav-scan-quarantine-helper'
+  'fenrig-apparmor-profiles-reload'
+  'fenrig-apparmor-profiles.hook'
+  'fenrig-apparmor-profiles.install'
+  'README.md'
+  'LICENSE'
+)
+sha512sums=('27f6627e65b7d25f4565d08c815e811d00807f95ee3e2bcf68067944fb054caaae855a02eb921e37a8af85d4b4628067cedbc4a60fa4e57721d831b76c23229a'
+            '1989664da046636e4f02dd589287b21a0df0ac430eb135803a5c05bb10c5cb09809acae584d6290204f099b89223be7690e9b81a1ac811571d5facbeac9de1db'
+            'd946b83fe3a96dc0c705abddfc328219e42999f80e57f91a52b4d6f415f6f043e6617824e1fe6974057a8de10479ba11c26bfd172a57be52fe60b01a6d670bc0'
+            '3aca611de2ac0bbd62c6479e3ecd1143155b4dba65454d21b2724d2c7a2ccc762345c8f6f200f79f759307ec5d16d394d64a9be4db60bfbb431c67a615358a47'
+            '733a35165c3beb3fe9c762be604fe2d4338ac1ab6c4e9aec6320b55c9d161bb5fdbe123d7c21aa84a36f966d9cb9f2d229dcd2a3e99485203e16e1928a767ee3'
+            'db42e559e570d375c5abec7891fb912a30e6c00260427a3e733df2e7eace0dce3f349b9ac2ec78dd891f09349b034a7a2336c89d2bb916503f598a2bc4274201'
+            '9143cdd3344d4ed5c6efc830c9bdfbb65fd336cf7b1c9bb441b611f23ff8849c9940083c5361f79249725152606f93d5efa62b9dc1c3140d2a4b1127282957c5'
+            'b48b0114b2bbd16dc3f137a7e7256bde199b243d1a282a3f4d84296ec535b246a9627ba8bc0f3aff84f9e7cb6dc574f4069dee241fc16614342cbdd8af68387b'
+            'f3e2c57cc6fe7b29545be45dcf00a32f31d55bf443675526aa08b9c753f0de099686e05c4940726e84f8cabc2e6a8c68b3989926e7009dea82456e620cfadd5c'
+            'c588eabe8239d124916ea94c1ec3483786be086c988b9afd1c2ea9bc8bde14e36e047b06f4a4443f340dd9a5aff84454127ad72ac5ff6880eaf44c2d9297a2f7'
+            '765c322a0c48f4d0be148a11a77441d7230061476fe6270d7d2da1858ef67373f52842a3ff1904fbff46f8194360af467de8d4c6899c67e8297beda50ef1a058'
+            'efc435a6d420757bf60050b2865cdcf2a1a459a9a6df543055c933dfa3ce9577297fd5c295050e5758542863dc253dc41a9c83095536f516ad0fb44f2f199ffe'
+            'b003a2b381496022b57389e1b5df4ae058698749bdd31ee0f683706aa6dc92b0fb4d8840a5da4743559396a4eafb853068bc099e70cc4046f130d639f324b8db'
+            '46fa1c861154b3066766ec772763d34bc2ab65f49cca452bf401a21110c871c0fb6c8cb84761eb3eebf0603c6b850632176053d84baf880f85cb9cf6310a5a62'
+            '557de9c52b2744f04153cc9ad56e7802df6f773471eddc1897838e591f5b0ae65671cbe19dcec242b5ed59a99b288974c975f7f249ef7e5d5b91f4768a35ec90'
+            'd61d77ef3e1a80aa966cd20b35ecd3c6202069b89b66f8760588e226303e9670ac9513361ad27578772ef481c334a2b23720697e65b75d56894a6ffd73709f31'
+            '7edeefff8a206f69d1b49e94245ca721c90320588b89e1ae119a067a608f214db94e065139c6b99e3c6926c5ff7b74423ad629193c15e48e50a2e956cf27b372'
+            '35cde8937b8b75e5af5057431c111ac6b833193867e38cf1a9c1bcf4cb39b943eaa7c142f833148063702f345666a80bad281ecafae37b5170ded23d2a19f6ee'
+            'df071612c2a839daa5b7c10b802282f3abd3c80157ae5b91919d38c9e17df6f36613c542daf560013bcee7c1b3069a11ea9772daa17e83c567e945511bd98bca'
+            '4f78dd7bd3458f0a31730fcd8a7ece6a377b68bcf979d323b96b615eba69768270fb6d728858e5f7d646a905fe3997558792fa71f4d231877b8b0d5d1171f463'
+            '6e852513be425a4f0624cb0953b98f471784e0842634835a9759fa6ad20f66d718a133d7b4bb031a3b52a2ebd2a24b9df43f9a1887000fee88828a124e39c815'
+            '929b9ddb7ca06b0440b8ad6fd9c1e07986381922414736fb61d8305f9e9ec79fb47499bc9d1f7b5f493e4bbf3b8473d911d09216d8bdf992a7f6b5fe243bcab0'
+            '32bb1cf00e36023effc1dde7548ededff350e4cf9434e0eaae210ef0131bbf2842d242754051ec4ba1f43d84d0e7092eb9a3ad5c10bb543a7b5546d4a63d92cb'
+            'e3fe37b3e1074fe3400d75e408720af2ddd903afae0c8648b7174a5bdd76fee2aecc3a905a94467f951ef497827d22622de232662c4804fbac61674543d4e70c'
+            '301c83dc6e0b25694ec01e5a37dcdc8b8b98b26933f04f725bf85761f3c0f1245dc22ee5754613253b6025a7f86eb6e9c6dd32e7137489a71a82ee1e13064f68'
+            '71d67e32a5b2ea180f4e4c86a241cecca3e063c36ee335b007f42d4b4c2a96f0e69fd68c70d3a2acd25dc4a0ef312fd19c33fb401d3e15ab4b05fff6105f42ad'
+            '8a2892360bb372f021b77c1a7dcf67ea9d2bf172b5aedc731a70b4921088b68a355d362a9170702fd1a533f61e8fa3b3891607fa20166e558900edba7696b902'
+            '5fc97cf09a5e1a81be5b189fed7233d5854eb3759379ae98b2cba6a6a9ee8a11943f1d94d4667a7ca981d55d5511e2b1fb7a3c19d64f2496f337ca05c58e5359'
+            '60b82e5a132f3e01d97ebd502cb99a0efd4db7cc084c6af1a4ef3ea643356134cf1ecefccf6d1f16568d9f52c080c37b03ac6f1a7b69f42a32e222e35ed0fe3a'
+            '0617995b958f93ee3976f1fe1393dfebc8f76748d2ef68df5698e4fa9cee69aad8f91904b6362805cf26f6e0d04b9c40298bae5115984148ba9a1f45128efa4c'
+            '7a6fc4081cd8460862d960e585c0ab1df81afc0559d8a0f87ae15880bf2287eca41ac45f3ad71eb05aedbb037c617dcb29f1d306a3a698071636ba5b98a7f70f'
+            'a499067751f225060f30b1856ebeae444e4db09cb50bf4715755eb6a5528d020cf382a96ba18ca98d130a776c01e1adc586a52bd69e273c908fe9228e2e60867'
+            '59728fccb59e5d9a451a5e1f225380054e9d192c34bfab00de42a995ca725a60fc04b0d4d616b9e9401d7c83f1651616f5512af3f34e38b7f3935576b213d852'
+            'f53b0d99ac05a9899641edc0e52f13dfc0c38061afc2ed01ad5bfa02ba5dcb60ae88551eccb719e980cccf07046936878b58b1b778ea045c8cb9f1ba77826abe'
+            '8468f4748623f7b32132abfc837789ffe0b2a6252b817f662a4d33f40c4aa0b62f83084a857ff6c2945d46be428281dc6e966774dad7663e7236810511b7eb4b'
+            '7b5ebca4b421404824bed61bab6f33ae65c26ee61e7873e102cfc2bb8d5eebda04fe002ea34de8be793bb8712b6302aac025b78afd82e8dfdfbdfd4a5382118c'
+            '7418c141afe7c077103f99c4daa8c194da5406aff059b7aa88265ca4da53f2c5c487f9d15cd93f597a49ea96232553f4063be8e82690b81bd18d1f35b5466861'
+            '45f396ba16d9186b18a2a4df9e92c7249b77d4093a7d3b9ccc224f898cf6de4a8f0c61647d607b1d11bc1dae4dc39a5fd35fe88fe5492daa42f5083903b32432'
+            '4d22147b3733a0468ba01f5d24de74a3938e432f46f66a9c457a4e781abe0398e6c8163b3d3a776185cfeef37576e307c06ec93390c1d5a5b7894a5328377a24'
+            '5fcf0a3325d64e27063c0c07bc2017d00fd060f5b070c1d59888c072197ba661acdc074087d55895186264456f49d26a801554468d0e76a2a8b21eb300d92027')
+
+package() {
+  install -Dm644 "$srcdir/fenrig-firefox" "$pkgdir/etc/apparmor.d/fenrig-firefox"
+  install -Dm644 "$srcdir/fenrig-thunderbird" "$pkgdir/etc/apparmor.d/fenrig-thunderbird"
+  install -Dm644 "$srcdir/fenrig-libreoffice" "$pkgdir/etc/apparmor.d/fenrig-libreoffice"
+  install -Dm644 "$srcdir/fenrig-evince" "$pkgdir/etc/apparmor.d/fenrig-evince"
+  install -Dm644 "$srcdir/fenrig-gwenview" "$pkgdir/etc/apparmor.d/fenrig-gwenview"
+  install -Dm644 "$srcdir/fenrig-okular" "$pkgdir/etc/apparmor.d/fenrig-okular"
+  install -Dm644 "$srcdir/fenrig-ark" "$pkgdir/etc/apparmor.d/fenrig-ark"
+  install -Dm644 "$srcdir/fenrig-spectacle" "$pkgdir/etc/apparmor.d/fenrig-spectacle"
+  install -Dm644 "$srcdir/fenrig-chromium" "$pkgdir/etc/apparmor.d/fenrig-chromium"
+  install -Dm644 "$srcdir/fenrig-chrome" "$pkgdir/etc/apparmor.d/fenrig-chrome"
+  install -Dm644 "$srcdir/fenrig-wowup-cf" "$pkgdir/etc/apparmor.d/fenrig-wowup-cf"
+  install -Dm644 "$srcdir/fenrig-mumble" "$pkgdir/etc/apparmor.d/fenrig-mumble"
+  install -Dm644 "$srcdir/fenrig-transmission-qt" "$pkgdir/etc/apparmor.d/fenrig-transmission-qt"
+  install -Dm644 "$srcdir/fenrig-mpv" "$pkgdir/etc/apparmor.d/fenrig-mpv"
+  install -Dm644 "$srcdir/fenrig-lutris" "$pkgdir/etc/apparmor.d/fenrig-lutris"
+  install -Dm644 "$srcdir/fenrig-electron" "$pkgdir/etc/apparmor.d/fenrig-electron"
+  install -Dm644 "$srcdir/fenrig-discord" "$pkgdir/etc/apparmor.d/fenrig-discord"
+  install -Dm644 "$srcdir/fenrig-steam" "$pkgdir/etc/apparmor.d/fenrig-steam"
+  install -Dm644 "$srcdir/fenrig-wine" "$pkgdir/etc/apparmor.d/fenrig-wine"
+  install -Dm644 "$srcdir/fenrig-browser-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-browser-common"
+  install -Dm644 "$srcdir/fenrig-sandbox-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-sandbox-common"
+  install -Dm644 "$srcdir/fenrig-removable-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-removable-common"
+  install -Dm644 "$srcdir/fenrig-kde-state-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-kde-state-common"
+  install -Dm644 "$srcdir/fenrig-document-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-document-common"
+  install -Dm644 "$srcdir/fenrig-electron-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-electron-common"
+  install -Dm644 "$srcdir/fenrig-compat-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-compat-common"
+  install -Dm644 "$srcdir/fenrig-gpu-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-gpu-common"
+  install -Dm644 "$srcdir/fenrig-gpu-wrappers-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-gpu-wrappers-common"
+  install -Dm644 "$srcdir/fenrig-game-input-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-game-input-common"
+  install -Dm644 "$srcdir/fenrig-eid-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-eid-common"
+  install -Dm644 "$srcdir/fenrig-tablet-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-tablet-common"
+  install -Dm644 "$srcdir/fenrig-clamav-native" "$pkgdir/etc/apparmor.d/fenrig-clamav-native"
+  install -Dm644 "$srcdir/fenrig-clamav-quarantine-gui" "$pkgdir/etc/apparmor.d/fenrig-clamav-quarantine-gui"
+  install -Dm644 "$srcdir/fenrig-clamav-scan-gui" "$pkgdir/etc/apparmor.d/fenrig-clamav-scan-gui"
+  install -Dm644 "$srcdir/fenrig-clamav-scan-quarantine-helper" "$pkgdir/etc/apparmor.d/fenrig-clamav-scan-quarantine-helper"
+  install -Dm755 "$srcdir/fenrig-apparmor-profiles-reload" "$pkgdir/usr/lib/fenrig-apparmor-profiles/reload"
+  install -Dm644 "$srcdir/fenrig-apparmor-profiles.hook" "$pkgdir/usr/share/libalpm/hooks/fenrig-apparmor-profiles.hook"
+  install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim: ts=2 sw=2 et:

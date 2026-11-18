@@ -1,0 +1,13 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# This covers the installed /usr/lib/electron44 runtime only. It is not a
+# generic policy for every Electron application or every future Electron ABI.
+profile electron /usr/lib/electron44/electron {
+  include <abstractions/fenrig-electron-common>
+  /usr/lib/electron44/** ixr,
+  owner @{HOME}/.config/electron44/** rwk,
+  owner @{HOME}/.cache/electron44/** rwk,
+  include if exists <local/fenrig-electron>
+}

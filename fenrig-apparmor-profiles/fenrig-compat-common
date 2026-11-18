@@ -1,0 +1,78 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# Broad compatibility baseline for Steam/Proton and Wine. This is deliberately
+# more permissive than the desktop-app policies, but it still denies the most
+# sensitive host credentials and persistence files below.
+include <abstractions/base>
+include <abstractions/audio>
+include <abstractions/video>
+include <abstractions/wayland>
+include <abstractions/fonts>
+include <abstractions/mesa>
+include <abstractions/vulkan>
+include <abstractions/nameservice>
+include <abstractions/openssl>
+include <abstractions/p11-kit>
+include <abstractions/dbus-session-strict>
+include <abstractions/dbus-accessibility-strict>
+include <abstractions/dconf>
+include <abstractions/kde>
+include <abstractions/fenrig-removable-common>
+include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-gpu-common>
+include <abstractions/fenrig-gpu-wrappers-common>
+include <abstractions/fenrig-game-input-common>
+include <abstractions/fenrig-tablet-common>
+
+/etc/{,ssl/} r,
+/etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+/etc/ssl/certs/** r,
+/usr/share/{,**} r,
+/usr/share/fonts/** r,
+/usr/share/mime/** r,
+/usr/share/applications/** r,
+/usr/share/icons/** r,
+/usr/share/locale/** r,
+
+network inet stream,
+network inet6 stream,
+network inet dgram,
+network inet6 dgram,
+userns,
+capability sys_admin,
+capability sys_chroot,
+owner @{PROC}/@{pid}/** r,
+owner @{PROC}/@{pid}/oom_score_adj w,
+owner /{dev,run,var/run}/shm/** rwk,
+owner /tmp/** rwk,
+owner /var/tmp/** rwk,
+
+# Compatibility execution is constrained to the known runtime/application
+# trees and the user's dedicated game/prefix trees. This is broad by design,
+# but is not a blanket host filesystem x rule.
+owner @{HOME}/Games/** ixr,
+owner @{HOME}/.local/share/Steam/** ixr,
+owner @{HOME}/.steam/** ixr,
+owner @{HOME}/.wine/** ixr,
+owner @{HOME}/.local/share/wineprefixes/** ixr,
+owner @{HOME}/.local/share/lutris/** ixr,
+owner @{HOME}/Downloads/** rwkix,
+owner @{HOME}/Desktop/** rwkix,
+owner @{HOME}/Public/** rwkix,
+
+deny @{HOME}/.ssh/** r,
+deny @{HOME}/.gnupg/** r,
+deny @{HOME}/.aws/** r,
+deny @{HOME}/.kube/** r,
+deny @{HOME}/.config/google-chrome/** r,
+deny @{HOME}/.config/chromium/** r,
+deny @{HOME}/.mozilla/** r,
+deny @{HOME}/.thunderbird/** r,
+deny @{HOME}/.bashrc w,
+deny @{HOME}/.profile w,
+deny @{HOME}/.xonshrc r,
+deny @{HOME}/.xonshrc w,
+deny /etc/** w,
+deny /usr/** w,
+deny /boot/** w,

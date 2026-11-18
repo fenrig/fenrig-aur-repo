@@ -1,0 +1,22 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile gwenview /usr/bin/gwenview {
+  include <abstractions/fenrig-document-common>
+  /usr/bin/gwenview mr,
+  /usr/lib/qt6/plugins/** mr,
+  owner @{HOME}/.config/gwenviewrc rwk,
+  owner @{HOME}/.config/gwenviewrc.lock rwk,
+  owner @{HOME}/.config/ rw,
+  owner @{HOME}/.config/kioslaverc r,
+  owner @{HOME}/.config/#* rwk,
+  owner @{HOME}/.cache/gwenview/** rwk,
+  owner @{HOME}/.local/state/gwenviewstaterc rwk,
+  owner @{HOME}/.local/state/gwenviewstaterc.lock rwk,
+  owner @{HOME}/.local/state/ rw,
+  owner @{HOME}/.local/state/#* rwk,
+  owner @{HOME}/.local/share/gwenview/recentfolders/ rw,
+  owner @{HOME}/.local/share/gwenview/recentfolders/** rwk,
+  include if exists <local/fenrig-gwenview>
+}

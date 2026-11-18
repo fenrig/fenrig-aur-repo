@@ -1,0 +1,20 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# Shared runtime permissions for user namespaces, bubblewrap/Glycin, and
+# hardware probing. These rules do not grant general home-directory access.
+userns,
+ # bwrap uses this inside an isolated network namespace to configure loopback.
+ capability net_admin,
+owner @{PROC}/@{pid}/{uid_map,gid_map,setgroups} w,
+owner /run/user/*/wayland-proxy-* rwk,
+/proc/sys/kernel/{overflowuid,overflowgid} r,
+/sys/devices/system/cpu/ r,
+/sys/devices/system/cpu/** r,
+/sys/bus/pci/devices/ r,
+/sys/bus/pci/devices/** r,
+/sys/bus/pci/devices/**/class r,
+/sys/devices/**/class r,
+/sys/devices/virtual/dmi/id/product_sku r,
+/usr/bin/bwrap ix,
+/usr/lib/glycin-loaders/** rix,

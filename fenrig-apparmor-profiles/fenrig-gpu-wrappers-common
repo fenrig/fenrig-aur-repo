@@ -1,0 +1,16 @@
+# vim:syntax=apparmor
+# Optional game GPU wrappers. Keep these out of browser and document profiles.
+abi <abi/4.0>,
+
+/usr/bin/optirun rix,
+/usr/bin/primusrun rix,
+/usr/bin/mangohud rix,
+/usr/bin/mangoapp rix,
+/usr/bin/bash rix,
+/usr/bin/env ix,
+/usr/lib/primus/** mr,
+/usr/lib/virtualgl/** mr,
+/usr/lib/mangohud/** mr,
+/usr/lib/libMangoHud.so* mr,
+
+include if exists <local/fenrig-gpu-wrappers-common>

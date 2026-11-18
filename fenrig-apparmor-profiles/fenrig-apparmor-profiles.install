@@ -1,0 +1,79 @@
+post_install() {
+  cat >&2 <<'EOF'
+
+fenrig-apparmor-profiles is experimental until tested on the target Plasma
+machine. The pacman hook reloads policy only when AppArmor is active. Restart
+Firefox and Thunderbird after the first successful load. A hook failure is
+visible; protection is not silently unloaded.
+
+To activate AppArmor, first inspect the current state:
+  systemctl status apparmor.service
+  cat /sys/kernel/security/lsm
+  cat /proc/cmdline
+
+On systemd systems, enable the loader after confirming the kernel has AppArmor:
+  sudo systemctl enable --now apparmor.service
+
+If `apparmor` is absent from `/sys/kernel/security/lsm`, add it to the
+existing `lsm=` option in the relevant systemd-boot loader entry, preserving
+the other configured LSMs, then reboot. Do not remove the existing entry or
+rewrite boot configuration automatically. Verify after reboot with:
+  cat /sys/kernel/security/lsm
+  sudo aa-status
+
+Current XanMod example (verify this still matches the machine): the running
+kernel is 7.3.4-x64v3-xanmod1, AppArmor is absent from its active LSM list,
+and the systemd-boot entry is `/boot/loader/entries/xanmod.conf`. Edit the
+existing `options` line and append:
+  lsm=landlock,lockdown,yama,integrity,apparmor,bpf
+Then run:
+  sudo systemctl enable --now apparmor.service
+  sudo reboot
+Do not replace the existing options line or remove its root, graphics, or
+other kernel parameters. Confirm after reboot that `/sys/kernel/security/lsm`
+contains `apparmor`.
+
+See the package README and Arch AppArmor documentation for the target's exact
+boot-entry layout and LSM ordering.
+
+EOF
+}
+post_upgrade() { post_install; }
+post_remove() {
+  cat >&2 <<'EOF'
+
+If profiles remain loaded after removal, remove them explicitly:
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-firefox
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-thunderbird
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-clamav-native
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-clamav-quarantine-gui
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-clamav-scan-gui
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-clamav-scan-quarantine-helper
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-libreoffice
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-evince
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-gwenview
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-okular
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-ark
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-spectacle
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-chromium
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-chrome
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-wowup-cf
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-mumble
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-mpv
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-lutris
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-electron
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-discord
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-steam
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-wine
+
+The apparmor package's original profile files remain untouched. To restore
+their labels after removal, reload the originals that exist on the machine
+explicitly:
+  sudo apparmor_parser -r /etc/apparmor.d/firefox
+  sudo apparmor_parser -r /etc/apparmor.d/thunderbird
+  sudo apparmor_parser -r /etc/apparmor.d/chromium
+  sudo apparmor_parser -r /etc/apparmor.d/chrome
+  sudo apparmor_parser -r /etc/apparmor.d/Discord
+  sudo apparmor_parser -r /etc/apparmor.d/steam
+EOF
+}

@@ -1,0 +1,15 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile ark /usr/bin/ark {
+  include <abstractions/fenrig-document-common>
+  /usr/bin/ark mr,
+  /usr/lib/qt6/plugins/** mr,
+  owner @{HOME}/.config/arkrc rwk,
+  owner @{HOME}/.cache/ark/** rwk,
+  owner @{HOME}/Documents/** rwk,
+  owner @{HOME}/Downloads/** rwk,
+  owner @{HOME}/Desktop/** rwk,
+  include if exists <local/fenrig-ark>
+}

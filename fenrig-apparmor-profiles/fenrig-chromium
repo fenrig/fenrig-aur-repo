@@ -1,0 +1,14 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Replaces Arch's unconfined profile named chromium without overwriting its
+# package-owned /etc/apparmor.d/chromium file.
+profile chromium /usr/lib/chromium/chromium {
+  include <abstractions/fenrig-electron-common>
+  /usr/lib/chromium/** ixr,
+  owner @{HOME}/.config/chromium/** rwk,
+  owner @{HOME}/.cache/chromium/** rwk,
+  owner @{HOME}/.local/share/chromium/** rwk,
+  include if exists <local/fenrig-chromium>
+}

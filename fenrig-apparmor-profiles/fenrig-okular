@@ -1,0 +1,13 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile okular /usr/bin/okular {
+  include <abstractions/fenrig-document-common>
+  /usr/bin/okular mr,
+  /usr/lib/qt6/plugins/** mr,
+  owner @{HOME}/.config/okularrc rwk,
+  owner @{HOME}/.local/share/okular/** rwk,
+  owner @{HOME}/.cache/okular/** rwk,
+  include if exists <local/fenrig-okular>
+}

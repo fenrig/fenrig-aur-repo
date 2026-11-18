@@ -1,0 +1,51 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile fenrig-clamav-native /usr/libexec/clamav/clamav-thunderbird-host {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  /usr/libexec/clamav/clamav-thunderbird-host mr,
+  # open_quarantine launches only the dedicated viewer under its own profile.
+  /usr/bin/clamav-quarantine-gui rPx -> fenrig-clamav-quarantine-gui,
+  /usr/lib/** mr,
+  /etc/clamav/clamd.conf r,
+  /run/clamav/clamd.ctl rw,
+  # The browser passes files by pathname. Permit the bridge to remove or
+  # quarantine user-owned infections in these explicitly selected roots, but
+  # do not grant execution or access to unrelated home data.
+  owner @{HOME}/{Downloads,Documents,Documenten,Pictures,Afbeeldingen}/ rw,
+  owner @{HOME}/{Downloads,Documents,Documenten,Pictures,Afbeeldingen}/** rwk,
+  owner /mnt/multi/{Downloads,Documents,Documenten,Pictures,Afbeeldingen}/ rw,
+  owner /mnt/multi/{Downloads,Documents,Documenten,Pictures,Afbeeldingen}/** rwk,
+  # The browser can pass files from arbitrary user-selected locations. The
+  # native bridge may read/remove those originals and write quarantine data.
+  owner @{HOME}/ rw,
+  owner @{HOME}/** rwk,
+  owner /mnt/multi/ rw,
+  owner /mnt/multi/** rwk,
+  owner /run/media/ rw,
+  owner /run/media/** rwk,
+  # Per-user quarantine payloads and the scanner's quarantine metadata log.
+  owner @{HOME}/.local/share/clamav/ r,
+  owner @{HOME}/.local/share/clamav/quarantine/ rw,
+  owner @{HOME}/.local/share/clamav/quarantine/** rwkl,
+  owner @{HOME}/.local/state/clamav/ rw,
+  owner @{HOME}/.local/state/clamav/** rwk,
+  /dev/null rw,
+  /proc/ r,
+  owner @{PROC}/@{pid}/** r,
+  owner /tmp/clamav-browser-* rwk,
+  /dev/stdin r,
+  /dev/stdout w,
+  /dev/stderr w,
+  deny @{HOME}/.ssh/** rw,
+  deny @{HOME}/.gnupg/** rw,
+  deny @{HOME}/.aws/** rw,
+  deny @{HOME}/.kube/** rw,
+  deny @{HOME}/.bashrc rw,
+  deny @{HOME}/.profile rw,
+  deny @{HOME}/.xonshrc rw,
+  include if exists <local/fenrig-clamav-native>
+}

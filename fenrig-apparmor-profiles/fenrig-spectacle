@@ -1,0 +1,28 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile spectacle /usr/bin/spectacle {
+  include <abstractions/fenrig-document-common>
+  /usr/bin/spectacle mr,
+  owner @{HOME}/.config/spectaclerc rwk,
+  owner @{HOME}/.config/spectaclerc.lock rwk,
+  owner @{HOME}/Pictures/Screenshots/ rw,
+  owner @{HOME}/Pictures/Screenshots/** rwkl,
+  owner @{HOME}/Pictures/Screenshots/#* rwk,
+  owner @{HOME}/Afbeeldingen/Screenshots/ rw,
+  owner @{HOME}/Afbeeldingen/Screenshots/** rwkl,
+  owner @{HOME}/Afbeeldingen/Screenshots/#* rwk,
+  owner @{HOME}/Videos/Screencasts/ rw,
+  owner @{HOME}/Videos/Screencasts/** rwkl,
+  owner @{HOME}/Videos/Screencasts/#* rwk,
+  owner @{HOME}/Video's/Screencasts/ rw,
+  owner @{HOME}/Video's/Screencasts/** rwkl,
+  owner @{HOME}/Video's/Screencasts/#* rwk,
+  owner @{HOME}/.cache/spectacle/ rw,
+  owner @{HOME}/.cache/spectacle/** rwk,
+  owner @{HOME}/.local/state/spectaclestaterc rwk,
+  owner @{HOME}/Videos/ r,
+  owner @{HOME}/Videos/** r,
+  include if exists <local/fenrig-spectacle>
+}

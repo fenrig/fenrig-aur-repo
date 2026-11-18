@@ -1,0 +1,81 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# The native-messaging bridge enters this profile only for the explicit
+# open_quarantine command.  Keep the viewer separate from the bridge so its
+# Qt/desktop access cannot become an arbitrary helper-execution permission.
+profile fenrig-clamav-quarantine-gui /usr/bin/clamav-quarantine-gui {
+  include <abstractions/base>
+  include <abstractions/audio>
+  include <abstractions/video>
+  include <abstractions/wayland>
+  include <abstractions/fonts>
+  include <abstractions/mesa>
+  include <abstractions/vulkan>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  include <abstractions/p11-kit>
+  include <abstractions/cups-client>
+  include <abstractions/dbus-session-strict>
+  include <abstractions/dbus-accessibility-strict>
+  include <abstractions/dconf>
+  include <abstractions/kde>
+  include <abstractions/xdg-open>
+  include <abstractions/dbus-accessibility>
+  include <abstractions/fenrig-kde-state-common>
+  include <abstractions/fenrig-gpu-common>
+
+  /usr/bin/clamav-quarantine-gui rix,
+  /usr/lib/** mr,
+  /usr/share/{,**} r,
+  /etc/{,ssl/} r,
+  /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+  /etc/ssl/certs/** r,
+  /usr/bin/xdg-open ix,
+  /dev/null rw,
+  /proc/ r,
+  owner @{PROC}/@{pid}/** r,
+  owner /{dev,run,var/run}/shm/** rwk,
+  owner /run/user/*/ rw,
+  owner /run/user/*/** rwk,
+  owner /tmp/** rwk,
+  owner /var/tmp/** rwk,
+  network unix stream,
+  network unix dgram,
+
+  # The viewer may inspect, restore, or delete quarantined payloads, but it
+  # cannot use this permission to execute them.  The bridge remains the only
+  # process with access to the original download/mail roots for quarantine.
+  owner @{HOME}/.local/share/ r,
+  owner @{HOME}/.local/share/clamav/ r,
+  owner @{HOME}/.local/share/clamav/quarantine/ rw,
+  owner @{HOME}/.local/share/clamav/quarantine/** rwk,
+  owner @{HOME}/.local/state/ r,
+  owner @{HOME}/.local/state/clamav/ r,
+  owner @{HOME}/.local/state/clamav/** rwk,
+  owner @{HOME}/.config/clamav/ rw,
+  owner @{HOME}/.config/clamav/** rwk,
+  owner @{HOME}/.cache/clamav/ rw,
+  owner @{HOME}/.cache/clamav/** rwk,
+  # Restore destinations are user-selected. Permit user-owned destinations
+  # across home and removable mounts, with the sensitive-path denies below.
+  owner @{HOME}/ rw,
+  owner @{HOME}/** rwk,
+  owner /mnt/multi/ rw,
+  owner /mnt/multi/** rwk,
+  owner /run/media/ rw,
+  owner /run/media/** rwk,
+  owner @{HOME}/.config/kcminputrc r,
+  owner @{HOME}/.config/kdedefaults/ r,
+  owner @{HOME}/.config/kdedefaults/** r,
+
+  deny @{HOME}/.ssh/** rw,
+  deny @{HOME}/.gnupg/** rw,
+  deny @{HOME}/.aws/** rw,
+  deny @{HOME}/.kube/** rw,
+  deny @{HOME}/.bashrc rw,
+  deny @{HOME}/.profile rw,
+  deny @{HOME}/.xonshrc rw,
+  include if exists <local/fenrig-clamav-quarantine-gui>
+}

@@ -1,0 +1,14 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile wowup-cf /opt/wowup-cf/wowup-cf {
+  include <abstractions/fenrig-electron-common>
+  /opt/wowup-cf/** ixr,
+  owner @{HOME}/.config/wowup-cf/** rwk,
+  owner @{HOME}/.cache/wowup-cf/** rwk,
+  owner @{HOME}/.local/share/wowup-cf/** rwk,
+  owner @{HOME}/.config/WowUp-CF/** rwk,
+  owner @{HOME}/.cache/WowUp-CF/** rwk,
+  include if exists <local/fenrig-wowup-cf>
+}

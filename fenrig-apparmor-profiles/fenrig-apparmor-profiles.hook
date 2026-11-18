@@ -1,0 +1,41 @@
+[Trigger]
+Type = Path
+Operation = Install
+Operation = Upgrade
+Target = etc/apparmor.d/fenrig-firefox
+Target = etc/apparmor.d/fenrig-thunderbird
+Target = etc/apparmor.d/fenrig-clamav-native
+Target = etc/apparmor.d/fenrig-clamav-quarantine-gui
+Target = etc/apparmor.d/fenrig-clamav-scan-gui
+Target = etc/apparmor.d/fenrig-clamav-scan-quarantine-helper
+Target = etc/apparmor.d/fenrig-libreoffice
+Target = etc/apparmor.d/fenrig-evince
+Target = etc/apparmor.d/fenrig-gwenview
+Target = etc/apparmor.d/fenrig-okular
+Target = etc/apparmor.d/fenrig-ark
+Target = etc/apparmor.d/fenrig-spectacle
+Target = etc/apparmor.d/fenrig-chromium
+Target = etc/apparmor.d/fenrig-chrome
+Target = etc/apparmor.d/fenrig-wowup-cf
+Target = etc/apparmor.d/fenrig-mumble
+Target = etc/apparmor.d/fenrig-electron
+Target = etc/apparmor.d/fenrig-discord
+Target = etc/apparmor.d/fenrig-transmission-qt
+Target = etc/apparmor.d/fenrig-mpv
+Target = etc/apparmor.d/fenrig-lutris
+Target = etc/apparmor.d/fenrig-steam
+Target = etc/apparmor.d/fenrig-wine
+Target = etc/apparmor.d/abstractions/fenrig-browser-common
+Target = etc/apparmor.d/abstractions/fenrig-document-common
+Target = etc/apparmor.d/abstractions/fenrig-electron-common
+Target = etc/apparmor.d/abstractions/fenrig-compat-common
+Target = etc/apparmor.d/abstractions/fenrig-gpu-common
+Target = etc/apparmor.d/abstractions/fenrig-gpu-wrappers-common
+Target = etc/apparmor.d/abstractions/fenrig-game-input-common
+Target = etc/apparmor.d/abstractions/fenrig-eid-common
+Target = etc/apparmor.d/abstractions/fenrig-tablet-common
+
+[Action]
+Description = Replacing Firefox/Thunderbird AppArmor policies
+When = PostTransaction
+Exec = /usr/lib/fenrig-apparmor-profiles/reload

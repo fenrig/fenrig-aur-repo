@@ -1,0 +1,22 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile transmission-qt /usr/bin/transmission-qt {
+  include <abstractions/fenrig-document-common>
+  network inet stream,
+  network inet6 stream,
+  network inet dgram,
+  network inet6 dgram,
+
+  /usr/bin/transmission-qt mr,
+  owner @{HOME}/.config/transmission/ rw,
+  owner @{HOME}/.config/transmission/** rwk,
+  owner @{HOME}/.cache/transmission/ rw,
+  owner @{HOME}/.cache/transmission/** rwk,
+  owner @{HOME}/.cache/transmission-qt/ rw,
+  owner @{HOME}/.cache/transmission-qt/** rwk,
+  owner @{HOME}/.local/share/transmission/ rw,
+  owner @{HOME}/.local/share/transmission/** rwk,
+  include if exists <local/fenrig-transmission-qt>
+}

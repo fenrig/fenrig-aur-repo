@@ -1,0 +1,26 @@
+# vim:syntax=apparmor
+# GPU device compatibility for applications that use Mesa, Vulkan, Wine or
+# hardware video. The standard Arch abstractions remain authoritative for the
+# driver libraries and common device access; these rules cover device nodes
+# present on some newer NVIDIA installations and DRM enumeration paths.
+abi <abi/4.0>,
+
+/dev/dri/ r,
+/dev/dri/** rw,
+/dev/nvidiactl rw,
+/dev/nvidia-modeset rw,
+/dev/nvidia[0-9]* rw,
+/dev/nvidia-uvm rw,
+/dev/nvidia-uvm-tools rw,
+/dev/nvidia-caps/ r,
+/dev/nvidia-caps/** rw,
+
+/etc/libva.conf r,
+
+@{sys}/class/drm/ r,
+@{sys}/class/drm/** r,
+@{sys}/devices/**/drm/ r,
+@{sys}/devices/**/drm/** r,
+@{PROC}/driver/nvidia/version r,
+
+include if exists <local/fenrig-gpu-common>

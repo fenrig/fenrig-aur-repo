@@ -1,0 +1,66 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Broad, prefix-oriented Wine policy. Prefer a separate WINEPREFIX per
+# untrusted Windows application; do not use the default prefix for secrets.
+profile wine /usr/bin/wine {
+  include <abstractions/fenrig-compat-common>
+  /usr/bin/wine mr,
+  /usr/bin/wineserver rPx -> wine-wineserver,
+  /usr/lib/wine/** ixr,
+  # Wine is intentionally broad for user-owned prefixes and applications.
+  owner @{HOME}/ rw,
+  owner @{HOME}/** rwkix,
+  owner /mnt/ rw,
+  owner /mnt/** rwkix,
+  owner /run/media/ rw,
+  owner /run/media/** rwkix,
+  owner @{HOME}/.wine/** rwkix,
+  owner @{HOME}/.local/share/wineprefixes/** rwkix,
+  owner @{HOME}/Games/** rwkix,
+  owner @{HOME}/.local/share/lutris/** rwkix,
+  include if exists <local/fenrig-wine>
+}
+
+profile wine-wineserver /usr/bin/wineserver {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  /usr/bin/wineserver mr,
+  /usr/lib/wine/** mr,
+  owner @{HOME}/.wine/** rwk,
+  owner @{HOME}/.local/share/wineprefixes/** rwk,
+  owner @{HOME}/Games/** rwk,
+  owner @{HOME}/.local/share/lutris/** rwk,
+  owner /tmp/** rwk,
+  owner /var/tmp/** rwk,
+  owner @{HOME}/ rw,
+  owner @{HOME}/** rwkix,
+  owner /mnt/ rw,
+  owner /mnt/** rwkix,
+  owner /run/media/ rw,
+  owner /run/media/** rwkix,
+  deny @{HOME}/.ssh/** r,
+  deny @{HOME}/.gnupg/** r,
+  deny @{HOME}/.aws/** r,
+  deny @{HOME}/.kube/** r,
+  deny @{HOME}/.password-store/** r,
+  deny @{HOME}/.local/share/keyrings/** r,
+  deny @{HOME}/.local/share/gnome-keyring/** r,
+  deny @{HOME}/.config/kwalletd/** r,
+  deny @{HOME}/.config/kwalletrc r,
+  deny @{HOME}/.mozilla/** r,
+  deny @{HOME}/.thunderbird/** r,
+  deny @{HOME}/.config/google-chrome/** r,
+  deny @{HOME}/.config/chromium/** r,
+  deny @{HOME}/**/*.pem r,
+  deny @{HOME}/**/*.key r,
+  deny @{HOME}/.bashrc rw,
+  deny @{HOME}/.profile rw,
+  deny @{HOME}/.bash_profile rw,
+  deny @{HOME}/.zshrc rw,
+  deny @{HOME}/.config/fish/** r,
+  deny @{HOME}/.config/zsh/** r,
+  deny @{HOME}/.xonshrc rw,
+  include if exists <local/fenrig-wine-wineserver>
+}

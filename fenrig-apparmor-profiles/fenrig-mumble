@@ -1,0 +1,18 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile mumble /usr/bin/mumble {
+  include <abstractions/fenrig-document-common>
+  network inet stream,
+  network inet6 stream,
+  network inet dgram,
+  network inet6 dgram,
+  /usr/bin/mumble mr,
+  /usr/lib/mumble/** mr,
+  owner @{HOME}/.config/Mumble/** rwk,
+  owner @{HOME}/.local/share/Mumble/** rwk,
+  owner @{HOME}/.cache/Mumble/** rwk,
+  owner @{HOME}/.local/share/mumble/** rwk,
+  include if exists <local/fenrig-mumble>
+}

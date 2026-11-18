@@ -1,0 +1,73 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# The scan UI's picker must enumerate arbitrary user-selected locations. It
+# can read user data, but only the explicit ClamAV state/quarantine roots are
+# writable. Scanning is delegated to the separately confined helper.
+profile fenrig-clamav-scan-gui /usr/bin/clamav-scan-gui {
+  include <abstractions/base>
+  include <abstractions/audio>
+  include <abstractions/video>
+  include <abstractions/wayland>
+  include <abstractions/fonts>
+  include <abstractions/mesa>
+  include <abstractions/vulkan>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+  include <abstractions/cups-client>
+  include <abstractions/dbus-session-strict>
+  include <abstractions/dbus-accessibility-strict>
+  include <abstractions/dconf>
+  include <abstractions/kde>
+  include <abstractions/xdg-open>
+  include <abstractions/dbus-accessibility>
+  include <abstractions/fenrig-kde-state-common>
+  include <abstractions/fenrig-gpu-common>
+
+  /usr/bin/clamav-scan-gui rix,
+  /usr/bin/clamav-scan-quarantine-helper rPx -> fenrig-clamav-scan-quarantine-helper,
+  /usr/bin/clamav-quarantine-gui rPx -> fenrig-clamav-quarantine-gui,
+  /usr/lib/** mr,
+  /usr/share/{,**} r,
+  /etc/{,ssl/} r,
+  /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+  /etc/ssl/certs/** r,
+  /usr/bin/xdg-open ix,
+  /dev/null rw,
+  /proc/ r,
+  owner @{PROC}/@{pid}/** r,
+  owner /{dev,run,var/run}/shm/** rwk,
+  owner /run/user/*/ rw,
+  owner /run/user/*/** rwk,
+  owner /tmp/** rwk,
+  owner /var/tmp/** rwk,
+  network unix stream,
+  network unix dgram,
+
+  # File/folder picker and scan-result display access.
+  owner @{HOME}/ r,
+  owner @{HOME}/** r,
+  owner /mnt/multi/ r,
+  owner /mnt/multi/** r,
+  owner /run/media/ r,
+  owner /run/media/** r,
+  owner @{HOME}/.config/clamav/ rw,
+  owner @{HOME}/.config/clamav/** rwk,
+  owner @{HOME}/.cache/clamav/ rw,
+  owner @{HOME}/.cache/clamav/** rwk,
+  owner @{HOME}/.local/share/clamav/ r,
+  owner @{HOME}/.local/share/clamav/quarantine/ r,
+  owner @{HOME}/.local/share/clamav/quarantine/** r,
+  owner @{HOME}/.local/state/clamav/ rw,
+  owner @{HOME}/.local/state/clamav/** rwk,
+
+  deny @{HOME}/.ssh/** r,
+  deny @{HOME}/.gnupg/** r,
+  deny @{HOME}/.aws/** r,
+  deny @{HOME}/.kube/** r,
+  deny @{HOME}/.bashrc r,
+  deny @{HOME}/.profile r,
+  deny @{HOME}/.xonshrc r,
+  include if exists <local/fenrig-clamav-scan-gui>
+}
