@@ -2,7 +2,7 @@
 
 Experimental Arch package for restrictive AppArmor policies covering native
 Firefox, Thunderbird, LibreOffice, Evince, Gwenview, Okular, Ark, Spectacle,
-Chromium, Google Chrome, WoWUp-CF, Mumble, Transmission Qt, Discord, and a specific system
+Chromium, Google Chrome, Cromite, WoWUp-CF, Mumble, Transmission Qt, Discord, and a specific system
 Electron runtime, plus mpv with its yt-dlp YouTube helper and Lutris, on KDE
 Plasma, especially Plasma Wayland.
 It also installs broad compatibility profiles for Steam/Proton and Wine.
@@ -307,8 +307,13 @@ thumbnail cache updates, `user-places.xbel` atomic replacement, and linking
 the temporary `*.kioworker.socket` endpoint under `/run/user/$UID`. KIO’s
 anonymous `#*` socket targets are also limited to that same runtime directory.
 
-Chromium and Google Chrome replace Arch's package-provided unconfined profile
-names without overwriting those files. WoWUp-CF and Discord are covered by
+Chromium, Google Chrome, and Cromite use separate exact executable attachments
+with a shared Chromium-family base. This Cromite build uses the existing
+`~/.config/chromium` and `~/.cache/chromium` trees, so its policy grants
+owner-scoped read/write access to those complete browser state trees; Cromite
+and Chromium are therefore not data-isolated from each other. Chromium and
+Google Chrome replace Arch's package-provided unconfined
+profile names without overwriting those files. WoWUp-CF and Discord are covered by
 their application-specific bundled executable paths. Generic Electron is not
 treated as one universal policy: the included `electron` profile targets only
 the installed `/usr/lib/electron44/electron` ABI and applies to every app

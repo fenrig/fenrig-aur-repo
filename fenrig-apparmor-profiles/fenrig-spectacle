@@ -22,6 +22,8 @@ profile spectacle /usr/bin/spectacle {
   owner @{HOME}/.cache/spectacle/ rw,
   owner @{HOME}/.cache/spectacle/** rwk,
   owner @{HOME}/.local/state/spectaclestaterc rwk,
+  owner @{HOME}/.local/state/spectaclestaterc.?????? rw,
+  owner link subset @{HOME}/.local/state/spectaclestaterc.?????? -> "@{HOME}/.local/state/#[0-9]*",
   owner @{HOME}/Videos/ r,
   owner @{HOME}/Videos/** r,
   include if exists <local/fenrig-spectacle>

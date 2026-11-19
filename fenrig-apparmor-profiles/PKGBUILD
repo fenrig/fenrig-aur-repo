@@ -1,7 +1,7 @@
 # Maintainer: Fenrig
 pkgname=fenrig-apparmor-profiles
 pkgver=0.1.0
-pkgrel=75
+pkgrel=88
 pkgdesc='Restrictive AppArmor policies for common Plasma desktop applications'
 arch=('any')
 url='https://github.com/fenrig/fenrig-aur-repo'
@@ -21,6 +21,7 @@ optdepends=(
   'spectacle: screenshot application executable covered by the Spectacle policy'
   'chromium: Chromium executable covered by the Chromium policy'
   'google-chrome: Google Chrome executable covered by the Chrome policy'
+  'cromite-bin: Cromite executable covered by the Cromite policy'
   'wowup-cf-bin: WoWUp-CF executable covered by the WoWUp policy'
   'mumble: Mumble executable covered by the Mumble policy'
   'transmission-qt: optional Qt torrent client executable covered by the Transmission policy'
@@ -44,6 +45,7 @@ source=(
   'fenrig-spectacle'
   'fenrig-chromium'
   'fenrig-chrome'
+  'fenrig-cromite'
   'fenrig-wowup-cf'
   'fenrig-mumble'
   'fenrig-transmission-qt'
@@ -60,6 +62,7 @@ source=(
   'fenrig-kde-state-common'
   'fenrig-document-common'
   'fenrig-electron-common'
+  'fenrig-chromium-common'
   'fenrig-compat-common'
   'fenrig-gpu-common'
   'fenrig-gpu-wrappers-common'
@@ -76,16 +79,17 @@ source=(
   'README.md'
   'LICENSE'
 )
-sha512sums=('0fd54bee05b4f2715e7f64d51b1ff738de0ee59dc612235c7717704efaad8587684d67aa0836ca6c1bf93d45be5f8b132de73239d646ebaea619d2d1ecb9229f'
-            '1989664da046636e4f02dd589287b21a0df0ac430eb135803a5c05bb10c5cb09809acae584d6290204f099b89223be7690e9b81a1ac811571d5facbeac9de1db'
-            'bbbbbfde07e110f74d55e573d52e1a379e125393a91ae2c3d9798f68bb5e6b027db1a487a9c06625314001f3a6257435a53a27544c66113305dcdfd580aab2c3'
+sha512sums=('f3481ca605659b34d413475ce2012a12acce20b1dddc61b137e57b92d1488b90ed5baa810f7d487ab132b3d13c32124935346a5696909f8ba6237b6be276df04'
+            '920d9cdd8eb1a50cbf099624b84e2755ed9893bf17ee74cee24445c82782b5dce6512ea2073f7fac449ac6fe618baa2e2ffa3c5dd70df260cfed82a6221ae64e'
+            'af5b24ceff20b4ffe9c71424b42b1076a8ccec66267489ab7a4890a048e983f2267cbb80a2063c29d81b2e0c162e32c87b90e9aaf772c3bd9d6d4ca0406137b9'
             '3aca611de2ac0bbd62c6479e3ecd1143155b4dba65454d21b2724d2c7a2ccc762345c8f6f200f79f759307ec5d16d394d64a9be4db60bfbb431c67a615358a47'
-            '733a35165c3beb3fe9c762be604fe2d4338ac1ab6c4e9aec6320b55c9d161bb5fdbe123d7c21aa84a36f966d9cb9f2d229dcd2a3e99485203e16e1928a767ee3'
-            '9f261a93c7c561d316d93f5bf8e9ddd8fb8be433297e1cb4ed74fa9b9203e45ba7125d5970d9d7ab049ea0892a828a39c4a5104b59af2f8aae3ce94bead21e4d'
-            'e2bc1af655d9d7299e974a7e3c73ef84f48e288f785cca4a36f47467fa709a328a2fb030c60d21a75a6c3f4d57de24b6d0bae1f0ee5ca8ead9aeb27124d83313'
-            'b48b0114b2bbd16dc3f137a7e7256bde199b243d1a282a3f4d84296ec535b246a9627ba8bc0f3aff84f9e7cb6dc574f4069dee241fc16614342cbdd8af68387b'
-            'f3e2c57cc6fe7b29545be45dcf00a32f31d55bf443675526aa08b9c753f0de099686e05c4940726e84f8cabc2e6a8c68b3989926e7009dea82456e620cfadd5c'
-            'c588eabe8239d124916ea94c1ec3483786be086c988b9afd1c2ea9bc8bde14e36e047b06f4a4443f340dd9a5aff84454127ad72ac5ff6880eaf44c2d9297a2f7'
+            '7c34c288ffa5e25e32e6de7152226244e975d6d034a2dbff1d90a269e87da0c34c663e51d3c61c627c9235638de556813b25f462e88357836e6eef8252f1b0cd'
+            'fd3a4e12c85a576c4898522f67deed2297bfb3e94ad254bb291941180a878aa57e7ae33d727fd9036935b993357abfe3c721283ab8526c1b5c546dc09123aeb3'
+            '4e9a6f2333b473e2e0480da68ca9bb1e60a41c814d01ab791ef3cb76f9d83a45fdde8e2717a9cdc815c07b2768f5c2d79e71614f92c74a54fbe8b80dba43b682'
+            '5b59ef0dee8eb38c42cabe93f909aa388306e3f165168e3dd6c8ff94cd97689d755afa2cc3983b32b738c33b97df9ae35c9d2c0c5988314b148bfad18eaf601d'
+            'bf4e07595859f6139339e1caa42eb32c5494784366d332fb1570878704f1c96d0cd504fd500cd971b842cd02d115493a891dde96f6202c6bd0fd788ec15d06fd'
+            'a8a4d5d60fe048a64de11f8f5592e759a1cd1df3fe30c68bd8acf0d59b43241d580308ea014a9cc01ad80553df6aa5302cfb26ff555d1b66b08ec72cac4db66d'
+            '469b697dac5a1ac909aef646430d54d4ab39c857488909ffcb2a92d47b33a7bbb73a1933f386070a27b53ac29a10316d77af81f80d05e42fa036919489a62228'
             '04bd772a2b4bf3b183db37b1b4ae23ed4102385a6614253fc98b5e2dc0f7f971bbf830e303a8876722449df96b41a775e14cdbd916b4a598a71d791042a5bac8'
             'efc435a6d420757bf60050b2865cdcf2a1a459a9a6df543055c933dfa3ce9577297fd5c295050e5758542863dc253dc41a9c83095536f516ad0fb44f2f199ffe'
             'b003a2b381496022b57389e1b5df4ae058698749bdd31ee0f683706aa6dc92b0fb4d8840a5da4743559396a4eafb853068bc099e70cc4046f130d639f324b8db'
@@ -97,12 +101,13 @@ sha512sums=('0fd54bee05b4f2715e7f64d51b1ff738de0ee59dc612235c7717704efaad8587684
             'e3bef1edc99b6897fe90d964e2c334a7670020564cd37c95b3637ceb74c67960f745e9c3c923cc9b5aed5c0ce71188deb854c03de67c07dae4582b3e5d231992'
             'deef61806d68054f01b87f06f01b715d0e539c408b212b07168f1ce27e1d22921d5561f8f743c12366a0a60ca05186f0bb987595d7cd9179471e9743c1539edb'
             'efb531ae96664a0c8b0a050e0f2d360bbddf60a35bb159ebc2c3dfc49f449d538e4402f4cd6d93c436e07a6643558aa751bff6a0346ab1202223227fa6a3935c'
-            'd9b5ba192f149e4e8625d7cc336b677b5be4622d3c7dce5d24793af7b13b4cde2fc160b4a667e003f0e003943c243192dedb6ffa3fa56bbd9f5ae1a034d33e66'
+            '95cc1c9b859155d49f0809c37d8f749df369db68b88eb00227136569d9622e4abd9db4254b7a95762b84500e5b759364f4ebbfe8050ca271a316407395802548'
             '929b9ddb7ca06b0440b8ad6fd9c1e07986381922414736fb61d8305f9e9ec79fb47499bc9d1f7b5f493e4bbf3b8473d911d09216d8bdf992a7f6b5fe243bcab0'
             'ccf3b1aca2cdded9dd31ae8911e270579043aff94eaa5d88a2520423ce7b3ef5d6aea63d62b5a918ae6e16f3312c6eeece3a0ae2a93e49523e762572c4a7f8c7'
             'e3fe37b3e1074fe3400d75e408720af2ddd903afae0c8648b7174a5bdd76fee2aecc3a905a94467f951ef497827d22622de232662c4804fbac61674543d4e70c'
             '2b7d81f461720c8c42890a0953f4a5cbc30dc4c81d78640613ee0418480d25a16407b2732e4484e8f530b94a4fd7b49554dffa623535ee8394b74fd46842c921'
-            '71d67e32a5b2ea180f4e4c86a241cecca3e063c36ee335b007f42d4b4c2a96f0e69fd68c70d3a2acd25dc4a0ef312fd19c33fb401d3e15ab4b05fff6105f42ad'
+            '9c074fc993dc533e437ef84e0621509ef29861d14624e78d6c68d54d28b5e9293c8f0ba59bcf3f29f41e8e12e7ecb0dbe5d98585a72d3b768fb5f417f840ccae'
+            '1e8bd1c431f067b927ac83e3ba5b170efdb97595155b9ca794911ef5cc2fc152f09826ba031b58bb1e703b479d67fb08a8fc69fcc0f3b31f6b7c1e9bcca3c303'
             'c5b20f742120238fa1d4f1d1a8b28afdc8b2658bc78ebcf719bbd77bdca78d24540fb2e247d46600d7faee1a5038c118ce550ca5d7b612746d824988aedd3264'
             '5fc97cf09a5e1a81be5b189fed7233d5854eb3759379ae98b2cba6a6a9ee8a11943f1d94d4667a7ca981d55d5511e2b1fb7a3c19d64f2496f337ca05c58e5359'
             '60b82e5a132f3e01d97ebd502cb99a0efd4db7cc084c6af1a4ef3ea643356134cf1ecefccf6d1f16568d9f52c080c37b03ac6f1a7b69f42a32e222e35ed0fe3a'
@@ -112,10 +117,10 @@ sha512sums=('0fd54bee05b4f2715e7f64d51b1ff738de0ee59dc612235c7717704efaad8587684
             '002832a1fe0923bc92c3699563bb097ad1ecf162f27a3e98638a1cd0f1995138eda41516c5c09532def4d601f5f80708ec4575dbed60b229b93378dcd7a422d7'
             '98cf11acad010993035d64e40f2591a61e5ec2d79a485b77a18552b54e1a07f83d13839852a11d75b541d47c313766a105d89d9de61df59f1c6993f46e00f580'
             'a37d12950f6690319e8c4218fb51f60c5eab4d86ec000390962d8a0edfbf9a96bb89ec36b397ddb950aa44dc255f7816168e63355fdacd287820410d77ead376'
-            '7b5ebca4b421404824bed61bab6f33ae65c26ee61e7873e102cfc2bb8d5eebda04fe002ea34de8be793bb8712b6302aac025b78afd82e8dfdfbdfd4a5382118c'
-            '7418c141afe7c077103f99c4daa8c194da5406aff059b7aa88265ca4da53f2c5c487f9d15cd93f597a49ea96232553f4063be8e82690b81bd18d1f35b5466861'
+            '69dc98905a097f28e13ca195f904b5daad8126cf2602acee1f0e7f824e759c2f66967fa708ea976ff400a803973f812e40bdec77876a8e07419c7615db7e1790'
+            '7852640fa504e864490f574c458134a9850c567aabb5fb4da254168da76b1604b38b36895899de8b9ad7a7b4bf595a765c16273a5a71600548e50e645cbb6b89'
             '45f396ba16d9186b18a2a4df9e92c7249b77d4093a7d3b9ccc224f898cf6de4a8f0c61647d607b1d11bc1dae4dc39a5fd35fe88fe5492daa42f5083903b32432'
-            '88b4fa4d05eec6a6f9cb603307054c6347e64f224280dfbc986b8afc3454f4650206bb6c0f51d15fa03f42702636090afcd90d8f15b277b7a0e68563a85c98f1'
+            '6cdf7418cf7f7db4d4c539c6314e5f4b142f99de8df06291291c614abb531300674bd20ff828834fd4b5491416d0a56b7bc04bdcef9d713b5d47a053d827e8ed'
             '5fcf0a3325d64e27063c0c07bc2017d00fd060f5b070c1d59888c072197ba661acdc074087d55895186264456f49d26a801554468d0e76a2a8b21eb300d92027')
 
 package() {
@@ -129,6 +134,7 @@ package() {
   install -Dm644 "$srcdir/fenrig-spectacle" "$pkgdir/etc/apparmor.d/fenrig-spectacle"
   install -Dm644 "$srcdir/fenrig-chromium" "$pkgdir/etc/apparmor.d/fenrig-chromium"
   install -Dm644 "$srcdir/fenrig-chrome" "$pkgdir/etc/apparmor.d/fenrig-chrome"
+  install -Dm644 "$srcdir/fenrig-cromite" "$pkgdir/etc/apparmor.d/fenrig-cromite"
   install -Dm644 "$srcdir/fenrig-wowup-cf" "$pkgdir/etc/apparmor.d/fenrig-wowup-cf"
   install -Dm644 "$srcdir/fenrig-mumble" "$pkgdir/etc/apparmor.d/fenrig-mumble"
   install -Dm644 "$srcdir/fenrig-transmission-qt" "$pkgdir/etc/apparmor.d/fenrig-transmission-qt"
@@ -145,6 +151,7 @@ package() {
   install -Dm644 "$srcdir/fenrig-kde-state-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-kde-state-common"
   install -Dm644 "$srcdir/fenrig-document-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-document-common"
   install -Dm644 "$srcdir/fenrig-electron-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-electron-common"
+  install -Dm644 "$srcdir/fenrig-chromium-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-chromium-common"
   install -Dm644 "$srcdir/fenrig-compat-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-compat-common"
   install -Dm644 "$srcdir/fenrig-gpu-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-gpu-common"
   install -Dm644 "$srcdir/fenrig-gpu-wrappers-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-gpu-wrappers-common"

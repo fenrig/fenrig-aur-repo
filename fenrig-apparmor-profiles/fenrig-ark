@@ -10,6 +10,8 @@ profile ark /usr/bin/ark {
   owner @{HOME}/.config/arkrc rwk,
   owner @{HOME}/.cache/ark/** rwk,
   owner @{HOME}/.local/state/arkstaterc rwk,
+  owner @{HOME}/.local/state/arkstaterc.?????? rw,
+  owner link subset @{HOME}/.local/state/arkstaterc.?????? -> "@{HOME}/.local/state/#[0-9]*",
   owner @{HOME}/.local/share/ark/ r,
   owner @{HOME}/.local/share/ark/ark_recentfiles rwk,
   owner @{HOME}/Documents/** rwk,

@@ -1,0 +1,7 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# Shared Chromium-family desktop/runtime policy. Executable trees and browser
+# profile directories remain in the browser-specific attachment profiles so
+# Chromium, Chrome, and Cromite cannot read one another's state.
+include <abstractions/fenrig-electron-common>

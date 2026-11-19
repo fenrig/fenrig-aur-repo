@@ -7,10 +7,12 @@ include <tunables/global>
 profile firefox /usr/lib/firefox/firefox {
   include <abstractions/fenrig-browser-common>
   /usr/lib/firefox/firefox rix,
+  /usr/lib/firefox/ r,
   /usr/lib/firefox/{crashhelper,gfxtest,plugin-container} rix,
   /usr/lib/firefox/crashreporter rix,
-  /usr/lib/firefox/** mr,
+  /usr/lib/firefox/** mrix,
   deny /usr/lib/firefox/** w,
+  /usr/lib/firefoxpwa/firefoxpwa-connector rix,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-firefox>
 }

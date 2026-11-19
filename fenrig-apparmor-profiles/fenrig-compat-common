@@ -27,6 +27,7 @@ include <abstractions/fenrig-tablet-common>
 
 /etc/{,ssl/} r,
 /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types,mailcap} r,
+/etc/paperspecs r,
 /etc/ssl/certs/** r,
 /usr/share/{,**} r,
 /usr/share/fonts/** r,

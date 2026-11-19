@@ -6,7 +6,7 @@ profile libreoffice /usr/lib/libreoffice/program/soffice.bin {
   include <abstractions/fenrig-document-common>
   /etc/libreoffice/ r,
   /etc/libreoffice/** r,
-  /etc/{libreoffice/{bootstraprc,psprint.conf,sofficerc},paperspecs} r,
+  /etc/libreoffice/{bootstraprc,psprint.conf,sofficerc} r,
   /usr/bin/{bash,gpg,gpgconf,gpgsm,paperconf} rix,
   owner @{HOME}/.thunderbird/profiles.ini r,
   owner @{HOME}/.thunderbird/{cert9.db,pkcs11.txt} rwk,
@@ -15,7 +15,8 @@ profile libreoffice /usr/lib/libreoffice/program/soffice.bin {
   owner @{HOME}/.mozilla/firefox/profiles.ini r,
   owner @{HOME}/{Templates,Sjablonen}/ r,
   owner @{HOME}/{Templates,Sjablonen}/** r,
-  /usr/lib/libreoffice/** mr,
+  /usr/lib/libreoffice/ r,
+  /usr/lib/libreoffice/** mrix,
   deny /usr/lib/libreoffice/** w,
   owner @{HOME}/.config/libreoffice/** rwk,
   owner @{HOME}/.cache/libreoffice/** rwk,

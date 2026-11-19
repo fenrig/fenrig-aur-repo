@@ -12,7 +12,8 @@ profile thunderbird /usr/lib/thunderbird/thunderbird {
   owner @{HOME}/.cache/thunderbird/ rw,
   owner @{HOME}/.cache/thunderbird/** rwk,
   /usr/lib/thunderbird/{crashhelper,gfxtest,plugin-container} rix,
-  /usr/lib/thunderbird/** mr,
+  /usr/lib/thunderbird/ r,
+  /usr/lib/thunderbird/** mrix,
   deny /usr/lib/thunderbird/** w,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-thunderbird>

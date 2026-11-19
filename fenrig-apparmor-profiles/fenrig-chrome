@@ -5,7 +5,7 @@ include <tunables/global>
 # Replaces Arch's unconfined profile named chrome without overwriting its
 # package-owned /etc/apparmor.d/chrome file.
 profile chrome /opt/google/chrome/chrome {
-  include <abstractions/fenrig-electron-common>
+  include <abstractions/fenrig-chromium-common>
   /opt/google/chrome/** ixr,
   owner @{HOME}/.config/google-chrome/** rwk,
   owner @{HOME}/.cache/google-chrome/** rwk,

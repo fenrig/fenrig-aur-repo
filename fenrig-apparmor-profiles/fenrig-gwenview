@@ -7,6 +7,8 @@ profile gwenview /usr/bin/gwenview {
   /usr/bin/gwenview mr,
   /usr/lib/qt6/plugins/** mr,
   owner @{HOME}/.config/gwenviewrc rwk,
+  owner @{HOME}/.config/gwenviewrc.?????? rw,
+  owner link subset @{HOME}/.config/gwenviewrc.?????? -> "@{HOME}/.config/#[0-9]*",
   owner @{HOME}/.config/gwenviewrc.lock rwk,
   owner @{HOME}/.config/ rw,
   owner @{HOME}/.config/kioslaverc r,
@@ -14,9 +16,13 @@ profile gwenview /usr/bin/gwenview {
   owner @{HOME}/.cache/gwenview/** rwk,
   owner @{HOME}/.local/state/gwenviewstaterc rwk,
   owner @{HOME}/.local/state/gwenviewstaterc.lock rwk,
+  owner @{HOME}/.local/state/gwenviewstaterc.?????? rw,
+  owner link subset @{HOME}/.local/state/gwenviewstaterc.?????? -> "@{HOME}/.local/state/#[0-9]*",
   owner @{HOME}/.local/state/ rw,
   owner @{HOME}/.local/state/#* rwk,
   owner @{HOME}/.local/share/gwenview/recentfolders/ rw,
   owner @{HOME}/.local/share/gwenview/recentfolders/** rwk,
+  owner @{HOME}/.local/share/baloo/index-lock rwk,
+  owner link subset @{HOME}/.local/share/gwenview/recentfolders/gvhistoryrc.?????? -> "@{HOME}/.local/share/gwenview/recentfolders/#[0-9]",
   include if exists <local/fenrig-gwenview>
 }

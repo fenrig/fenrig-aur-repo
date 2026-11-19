@@ -1,0 +1,29 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# cromite-bin's user-facing launcher is /usr/bin/cromite; it starts the
+# package-owned browser under /usr/lib/cromite/.
+profile cromite /usr/bin/cromite {
+  /usr/bin/cromite rix,
+  include <abstractions/fenrig-chromium-common>
+  # Cromite's Chromium sandbox requires this capability when the unprivileged
+  # user-namespace path is unavailable. Keep it scoped to this browser.
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+  # Crashpad attaches to the browser's own same-profile helper process.
+  ptrace (trace) peer=cromite,
+  /usr/lib/cromite/ r,
+  /usr/lib/cromite/** ixr,
+  owner @{HOME}/.config/cromite/** rwk,
+  # This Cromite build uses Chromium's existing data root, including profile
+  # databases and atomic-save temporary files. This is intentionally scoped
+  # to Chromium state rather than the user's home, but means Cromite and the
+  # separately confined Chromium profile must not be treated as isolated from
+  # one another while they share this directory.
+  owner @{HOME}/.config/chromium/** rwk,
+  owner @{HOME}/.cache/chromium/** rwk,
+  owner @{HOME}/.local/share/cromite/** rwk,
+  include if exists <local/fenrig-cromite>
+}
