@@ -381,6 +381,14 @@ application that invokes Electron 43 directly is not automatically covered.
 A future Ferdium package that changes its launcher, Electron ABI, or state
 directory requires a profile update and runtime validation.
 
+Stremio Enhanced has a separate `stremio-enhanced-fenrig` profile attached to
+`/usr/bin/stremio-enhanced-fenrig`. Its launcher currently uses the shared
+Electron 44 runtime and `/usr/lib/stremio-enhanced-fenrig`; the profile grants
+that application tree and its own state directory, plus the narrowly scoped
+Electron sandbox capabilities required by the observed startup path. It does
+not change the generic Electron profile. Updates to the Stremio package or its
+Electron runtime require renewed parser and startup validation.
+
 WoWUp-CF's bundled Electron build currently requests `CAP_SYS_ADMIN`,
 `CAP_SYS_CHROOT`, and `CAP_SYS_PTRACE` while
 initializing its Chromium sandbox. The package grants that capability only to

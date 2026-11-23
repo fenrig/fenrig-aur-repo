@@ -68,6 +68,7 @@ If profiles remain loaded after removal, remove them explicitly:
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-discord
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-steam
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-wine
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-stremio-enhanced
 
 The apparmor package's original profile files remain untouched. To restore
 their labels after removal, reload the originals that exist on the machine

@@ -66,6 +66,8 @@ owner @{HOME}/Public/ r,
 owner @{HOME}/Public/** r,
 
 /usr/bin/xdg-open ix,
+/usr/bin/kde-open ix,
+/usr/bin/kde-open5 ix,
 /usr/bin/{cat,hostname} ix,
 
 deny @{HOME}/.ssh/** r,

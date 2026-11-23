@@ -6,6 +6,8 @@ include <tunables/global>
 # generic policy for every Electron application or every future Electron ABI.
 profile electron /usr/lib/electron44/electron {
   include <abstractions/fenrig-electron-common>
+  /usr/bin/electron rix,
+  /usr/bin/electron44 rix,
   /usr/lib/electron44/** ixr,
   owner @{HOME}/.config/electron44/** rwk,
   owner @{HOME}/.cache/electron44/** rwk,

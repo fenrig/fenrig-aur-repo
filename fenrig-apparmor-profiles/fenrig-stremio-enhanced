@@ -1,0 +1,47 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# The Arch launcher changes into the application tree and execs the shared
+# Electron 44 runtime with dist/main.js. Attach here so this compatibility
+# allowance remains specific to Stremio Enhanced.
+profile stremio-enhanced-fenrig /usr/bin/stremio-enhanced-fenrig {
+  include <abstractions/fenrig-electron-common>
+
+  # Electron's chrome-sandbox uses these while creating its user namespace.
+  capability sys_admin,
+  capability sys_chroot,
+
+  /usr/bin/stremio-enhanced-fenrig r,
+  /usr/bin/sh rix,
+  /usr/bin/bash rix,
+  /usr/bin/electron rix,
+  /usr/bin/electron44 rix,
+  /usr/lib/electron44/electron mrix,
+  /usr/lib/electron44/chrome-sandbox rix,
+  /usr/lib/electron44/** mr,
+  /usr/lib/stremio-enhanced-fenrig/** mr,
+  /usr/bin/mpv Px -> mpv,
+  /usr/bin/vlc rix,
+  /usr/bin/cvlc rix,
+  /usr/bin/ffmpeg rix,
+  /usr/bin/ffprobe rix,
+  /usr/lib/vlc/** mr,
+  /usr/share/vlc/** r,
+  owner /proc/*/stat r,
+
+  owner @{HOME}/.config/electron-flags.conf r,
+  owner @{HOME}/.config/electron44-flags.conf r,
+  owner @{HOME}/.config/stremio-enhanced/ rwkl,
+  owner @{HOME}/.config/stremio-enhanced/** rwkl,
+  owner @{HOME}/.cache/stremio-enhanced/ rwkl,
+  owner @{HOME}/.cache/stremio-enhanced/** rwkl,
+  owner @{HOME}/.local/share/stremio-enhanced/ rwkl,
+  owner @{HOME}/.local/share/stremio-enhanced/** rwkl,
+  owner @{HOME}/.config/vlc/ rwkl,
+  owner @{HOME}/.config/vlc/** rwkl,
+  owner @{HOME}/.cache/vlc/ rwkl,
+  owner @{HOME}/.cache/vlc/** rwkl,
+
+  include if exists <local/fenrig-stremio-enhanced>
+}

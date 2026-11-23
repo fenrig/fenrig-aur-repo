@@ -63,7 +63,7 @@ profiles='fenrig-bwrap fenrig-firefox fenrig-thunderbird fenrig-libreoffice
 fenrig-evince fenrig-gwenview fenrig-okular fenrig-ark fenrig-spectacle
 fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-ferdium fenrig-mumble
 fenrig-transmission-qt fenrig-mpv fenrig-lutris fenrig-electron fenrig-discord
-fenrig-steam fenrig-wine fenrig-clamav-native fenrig-clamav-quarantine-gui
+fenrig-steam fenrig-wine fenrig-stremio-enhanced fenrig-clamav-native fenrig-clamav-quarantine-gui
 fenrig-clamav-scan-gui fenrig-clamav-scan-quarantine-helper'
 missing=0
 for profile in $profiles; do
