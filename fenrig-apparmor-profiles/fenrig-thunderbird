@@ -2,7 +2,7 @@
 abi <abi/4.0>,
 include <tunables/global>
 
-profile thunderbird /usr/lib/thunderbird/thunderbird {
+profile thunderbird /usr/lib/thunderbird/thunderbird flags=(attach_disconnected) {
   include <abstractions/fenrig-browser-common>
   /usr/lib/thunderbird/thunderbird rix,
   owner @{HOME}/.thunderbird/ rw,
@@ -14,6 +14,7 @@ profile thunderbird /usr/lib/thunderbird/thunderbird {
   /usr/lib/thunderbird/{crashhelper,gfxtest,plugin-container} rix,
   /usr/lib/thunderbird/ r,
   /usr/lib/thunderbird/** mrix,
+  /usr/lib/gio-launch-desktop ix,
   deny /usr/lib/thunderbird/** w,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-thunderbird>
