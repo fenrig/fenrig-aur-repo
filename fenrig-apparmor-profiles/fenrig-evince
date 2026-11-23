@@ -12,6 +12,9 @@ profile evince /usr/bin/evince {
   /opt/google/chrome/chrome Px -> chrome,
   /usr/bin/cromite Px -> cromite,
   /usr/lib/thunderbird/thunderbird Px -> thunderbird,
+  /usr/bin/gwenview Px -> gwenview,
+  /usr/bin/libreoffice Px -> libreoffice,
+  /usr/lib/libreoffice/program/soffice.bin Px -> libreoffice,
   owner @{HOME}/.config/evince/** rwk,
   owner @{HOME}/.cache/evince/** rwk,
   include if exists <local/fenrig-evince>
