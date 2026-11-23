@@ -62,6 +62,7 @@ If profiles remain loaded after removal, remove them explicitly:
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-mumble
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-mpv
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-mpv-yt-dlp
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-ferdium
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-lutris
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-electron
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-discord

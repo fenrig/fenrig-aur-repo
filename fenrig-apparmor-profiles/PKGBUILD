@@ -1,7 +1,7 @@
 # Maintainer: Fenrig
 pkgname=fenrig-apparmor-profiles
 pkgver=0.1.0
-pkgrel=108
+pkgrel=112
 pkgdesc='Restrictive AppArmor policies for common Plasma desktop applications'
 arch=('any')
 url='https://github.com/fenrig/fenrig-aur-repo'
@@ -23,6 +23,7 @@ optdepends=(
   'google-chrome: Google Chrome executable covered by the Chrome policy'
   'cromite-bin: Cromite executable covered by the Cromite policy'
   'wowup-cf-bin: WoWUp-CF executable covered by the WoWUp policy'
+  'ferdium-electron: Ferdium launcher covered by the Ferdium policy'
   'mumble: Mumble executable covered by the Mumble policy'
   'transmission-qt: optional Qt torrent client executable covered by the Transmission policy'
   'mpv: mpv media player executable covered by the mpv policy'
@@ -48,6 +49,7 @@ source=(
   'fenrig-chrome'
   'fenrig-cromite'
   'fenrig-wowup-cf'
+  'fenrig-ferdium'
   'fenrig-mumble'
   'fenrig-transmission-qt'
   'fenrig-mpv'
@@ -96,6 +98,7 @@ sha512sums=('58d33a1fa55e38d36cb510883318d70d50164eb642637e624179c5a3c11d4b41ab8
             'a1d2e5eae2d19cdb0d30d0fa03b6e812fc584d92428f90dafa16b66781394f463a4e5191edd6109122996c17b59f5130c5549f81712c413af18c008063b3e508'
             '5405a806110ac468a52896f99b6b2db09363628f179bee7fab475dd309660c1f524705334f3e449023d779aa9e3aca8e05ea5e01474cf70cfaa15a1a2ec175c7'
             '04bd772a2b4bf3b183db37b1b4ae23ed4102385a6614253fc98b5e2dc0f7f971bbf830e303a8876722449df96b41a775e14cdbd916b4a598a71d791042a5bac8'
+            '872169c873eb508e82e2952495dc2184f4fc96a50ff47f9aa6bf51073384ba3834e2f9ce3173105799dbd300f1ba07f31e5c3fea07200858545071834d074fa1'
             'efc435a6d420757bf60050b2865cdcf2a1a459a9a6df543055c933dfa3ce9577297fd5c295050e5758542863dc253dc41a9c83095536f516ad0fb44f2f199ffe'
             'b003a2b381496022b57389e1b5df4ae058698749bdd31ee0f683706aa6dc92b0fb4d8840a5da4743559396a4eafb853068bc099e70cc4046f130d639f324b8db'
             'b4b7377ec59e88c6c4cac3a3c11e904799a6febeac53198c1519b22387b2334f9b8f065495af8909f982ceeb6195c963264b987151cbe3521573c3e825c1305b'
@@ -125,11 +128,11 @@ sha512sums=('58d33a1fa55e38d36cb510883318d70d50164eb642637e624179c5a3c11d4b41ab8
             '002832a1fe0923bc92c3699563bb097ad1ecf162f27a3e98638a1cd0f1995138eda41516c5c09532def4d601f5f80708ec4575dbed60b229b93378dcd7a422d7'
             '98cf11acad010993035d64e40f2591a61e5ec2d79a485b77a18552b54e1a07f83d13839852a11d75b541d47c313766a105d89d9de61df59f1c6993f46e00f580'
             'a37d12950f6690319e8c4218fb51f60c5eab4d86ec000390962d8a0edfbf9a96bb89ec36b397ddb950aa44dc255f7816168e63355fdacd287820410d77ead376'
-            '3a19e79dbaf7a243b7cf6e8a7f1e4cd9ac3a9414e872568321a9be9cc952c781291e13b7967ea654ecc4ecd487962178abaae04827eeb9005f100dfde153d3ed'
+            '583e677b0f6c2c3eaa24f0cedc957749329060cbe3535eb030d5ebe7d6b67ebb123cbbabc5c7758996dd195d95c2d4cef1fa5814bf1e5a536fb370dad30b3365'
             '3ffb1d75669770dcf0031f2b8781626acb3c4500143cdf1d651f3417459f7b10a479e42e8d747b9c4da83b67280a7b748e64ccb86ea6457b0555d305584186dd'
-            'f53c27a4a13c8b497348062639e669b8cb0d8cdfaed7a01722431039cc2d273614144641f4eed59bb05f98d34c648afdb83528eba224a61dac93ca0eb9b1086f'
-            '62c288c7b2753a36c9a5cef958327c69612b609ca51df3536cc072e7381c96165c39b199fe227745cd749c4eb70d2bfb5941aa77bff9cdf7bb8390a9c09a55d9'
-            '20002f049d2127e7cce124b629cca68bfce6aa8462968a7dc43c859f69e7395dd4990899d5c10fc6233966c71a01b3520451fe16d4100a175f064e99ce98a6e1'
+            'ceadc44e158fbc0b40f5cbeb2fbcb46cda043c4f2cc446497e27a50d98c71ad3a63c9e71a8ea7770ee62586fd918d86ab8aa37b6abc837d1b525f00d3b77aa24'
+            '0c2bdd3c908e467522b81af90b41d069c3124a45d7af28c976f0e9e10cad756747bd811897e4d6477556ead94e17d6600c45704e2b18c6f5d834165f9743812a'
+            'fd840c00be0e8ad2620ef9a260e04a23dadd8ac2df6e772eafc2dc70d6c5a792c90b06c28af8990607a601ea591cf79def449040ed74cb866843a3db5e78ff80'
             '5fcf0a3325d64e27063c0c07bc2017d00fd060f5b070c1d59888c072197ba661acdc074087d55895186264456f49d26a801554468d0e76a2a8b21eb300d92027')
 
 check() {
@@ -137,7 +140,7 @@ check() {
   local profiles=(
     fenrig-bwrap fenrig-firefox fenrig-thunderbird fenrig-libreoffice
     fenrig-evince fenrig-gwenview fenrig-okular fenrig-ark fenrig-spectacle
-    fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-mumble
+    fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-ferdium fenrig-mumble
     fenrig-transmission-qt fenrig-mpv fenrig-mpv-yt-dlp fenrig-lutris fenrig-electron fenrig-discord
     fenrig-steam fenrig-wine fenrig-clamav-native fenrig-clamav-quarantine-gui
     fenrig-clamav-scan-gui fenrig-clamav-scan-quarantine-helper
@@ -182,6 +185,7 @@ package() {
   install -Dm644 "$srcdir/fenrig-chrome" "$pkgdir/etc/apparmor.d/fenrig-chrome"
   install -Dm644 "$srcdir/fenrig-cromite" "$pkgdir/etc/apparmor.d/fenrig-cromite"
   install -Dm644 "$srcdir/fenrig-wowup-cf" "$pkgdir/etc/apparmor.d/fenrig-wowup-cf"
+  install -Dm644 "$srcdir/fenrig-ferdium" "$pkgdir/etc/apparmor.d/fenrig-ferdium"
   install -Dm644 "$srcdir/fenrig-mumble" "$pkgdir/etc/apparmor.d/fenrig-mumble"
   install -Dm644 "$srcdir/fenrig-transmission-qt" "$pkgdir/etc/apparmor.d/fenrig-transmission-qt"
   install -Dm644 "$srcdir/fenrig-mpv" "$pkgdir/etc/apparmor.d/fenrig-mpv"

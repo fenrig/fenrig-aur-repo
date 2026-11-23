@@ -11,7 +11,7 @@ fi
 
 for profile in fenrig-bwrap fenrig-clamav-native fenrig-clamav-quarantine-gui fenrig-clamav-scan-gui fenrig-clamav-scan-quarantine-helper fenrig-firefox fenrig-thunderbird \
   fenrig-libreoffice fenrig-evince fenrig-gwenview fenrig-okular fenrig-ark fenrig-spectacle \
-  fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-mumble fenrig-transmission-qt fenrig-mpv-yt-dlp fenrig-mpv fenrig-lutris fenrig-electron fenrig-discord \
+  fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-ferdium fenrig-mumble fenrig-transmission-qt fenrig-mpv-yt-dlp fenrig-mpv fenrig-lutris fenrig-electron fenrig-discord \
   fenrig-steam fenrig-wine; do
   printf 'fenrig-apparmor-profiles: replacing %s\n' "$profile" >&2
   if ! "$parser" --replace "$profiles/$profile"; then

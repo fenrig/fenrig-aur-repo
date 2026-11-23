@@ -1,0 +1,35 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Ferdium's Arch launcher is a shell script which execs electron43 with
+# /usr/lib/ferdium as its application directory. Attaching here keeps the
+# policy specific to the Ferdium launcher instead of covering every Electron
+# 43 application installed later.
+profile ferdium /usr/bin/ferdium {
+  include <abstractions/fenrig-electron-common>
+
+  # Electron 43's chrome-sandbox uses this while creating its user namespace.
+  # Keep the compatibility capability local to Ferdium's profile.
+  capability sys_admin,
+  capability sys_chroot,
+
+  /usr/bin/ferdium r,
+  /usr/bin/bash rix,
+  /usr/bin/electron43 rix,
+  /usr/lib/electron43/electron mrix,
+  /usr/lib/electron43/chrome-sandbox rix,
+  /usr/lib/electron43/** mr,
+  /usr/lib/ferdium/** mr,
+
+  owner @{HOME}/.config/electron43-flags.conf r,
+  owner @{HOME}/.config/electron-flags.conf r,
+  owner @{HOME}/.config/Ferdium/ rwkl,
+  owner @{HOME}/.config/Ferdium/** rwkl,
+  owner @{HOME}/.cache/Ferdium/ rwkl,
+  owner @{HOME}/.cache/Ferdium/** rwkl,
+  owner @{HOME}/.local/share/Ferdium/ rwkl,
+  owner @{HOME}/.local/share/Ferdium/** rwkl,
+
+  include if exists <local/fenrig-ferdium>
+}

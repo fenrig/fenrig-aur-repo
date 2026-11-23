@@ -292,6 +292,8 @@ record profile labels from `aa-status` and `/proc/$PID/attr/current`:
    For applications using bwrap/Glycin, record whether helpers show
    `fenrig-bwrap` or `fenrig-bwrap-unpriv` in `/proc/$PID/attr/current` and
    confirm that the application sandbox still reports enabled.
+   Start Ferdium separately and verify its renderer/GPU processes show the
+   `ferdium` label, services remain usable, and state persists after restart.
 2. Exercise DNS, HTTPS browsing, mail send/receive, authentication, and
    certificate/token access.
 3. Test Downloads, uploads through the Plasma chooser, mail attachments,
@@ -369,6 +371,15 @@ treated as one universal policy: the included `electron` profile targets only
 the installed `/usr/lib/electron44/electron` ABI and applies to every app
 using that runtime. A future Electron version or an app-bundled runtime needs
 a new exact profile and validation.
+
+Ferdium has a separate `ferdium` profile attached to the packaged
+`/usr/bin/ferdium` launcher. The observed Arch launcher executes Electron 43
+with `/usr/lib/ferdium`; the policy permits that runtime and app tree,
+Ferdium's own `~/.config/Ferdium` state, and the shared Electron desktop
+integrations. It does not attach to `/usr/bin/electron43` globally, so another
+application that invokes Electron 43 directly is not automatically covered.
+A future Ferdium package that changes its launcher, Electron ABI, or state
+directory requires a profile update and runtime validation.
 
 WoWUp-CF's bundled Electron build currently requests `CAP_SYS_ADMIN`,
 `CAP_SYS_CHROOT`, and `CAP_SYS_PTRACE` while
