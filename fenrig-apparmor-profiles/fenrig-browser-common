@@ -86,6 +86,8 @@ owner @{HOME}/.local/share/applications/mimeinfo.cache r,
 /usr/bin/gio ix,
 /usr/lib/gio-launch-desktop ix,
 /usr/bin/plasma-browser-integration-host rix,
+/usr/bin/okular Px -> okular,
+/usr/bin/evince Px -> evince,
 /dev/char/195:* rw,
 owner @{HOME}/.cache/glycin/** rwk,
 

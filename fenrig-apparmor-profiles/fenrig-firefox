@@ -12,6 +12,7 @@ profile firefox /usr/lib/firefox/firefox {
   /usr/lib/firefox/crashreporter rix,
   /usr/lib/firefox/** mrix,
   deny /usr/lib/firefox/** w,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   /usr/lib/firefoxpwa/firefoxpwa-connector rix,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-firefox>

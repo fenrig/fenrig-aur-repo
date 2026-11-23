@@ -7,6 +7,7 @@ include <tunables/global>
 profile chromium /usr/lib/chromium/chromium {
   include <abstractions/fenrig-chromium-common>
   /usr/lib/chromium/** ixr,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/chromium/** rwk,
   owner @{HOME}/.cache/chromium/** rwk,
   owner @{HOME}/.local/share/chromium/** rwk,

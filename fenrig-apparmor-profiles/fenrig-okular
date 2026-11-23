@@ -5,6 +5,11 @@ include <tunables/global>
 profile okular /usr/bin/okular {
   include <abstractions/fenrig-document-common>
   /usr/bin/okular mr,
+  /usr/lib/firefox/firefox Px -> firefox,
+  /usr/lib/chromium/chromium Px -> chromium,
+  /opt/google/chrome/chrome Px -> chrome,
+  /usr/bin/cromite Px -> cromite,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   /usr/lib/qt6/plugins/** mr,
   owner @{HOME}/.config/okularpartrc.* rwl,
   owner @{HOME}/.config/okularpartrc rwk,

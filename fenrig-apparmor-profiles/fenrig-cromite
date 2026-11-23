@@ -16,6 +16,7 @@ profile cromite /usr/bin/cromite {
   ptrace (trace) peer=cromite,
   /usr/lib/cromite/ r,
   /usr/lib/cromite/** ixr,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/cromite/** rwk,
   # This Cromite build uses Chromium's existing data root, including profile
   # databases and atomic-save temporary files. This is intentionally scoped

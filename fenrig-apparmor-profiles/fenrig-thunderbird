@@ -15,6 +15,13 @@ profile thunderbird /usr/lib/thunderbird/thunderbird flags=(attach_disconnected)
   /usr/lib/thunderbird/ r,
   /usr/lib/thunderbird/** mrix,
   deny /usr/lib/thunderbird/** w,
+  # Desktop HTTP(S) handlers resolve to Firefox on this installation. Start
+  # it under its own profile instead of inheriting Thunderbird's profile.
+  /usr/lib/firefox/firefox Px -> firefox,
+  # Permit alternate desktop browser handlers using their own profiles.
+  /usr/lib/chromium/chromium Px -> chromium,
+  /opt/google/chrome/chrome Px -> chrome,
+  /usr/bin/cromite Px -> cromite,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-thunderbird>
 }

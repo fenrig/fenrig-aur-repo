@@ -7,6 +7,7 @@ include <tunables/global>
 profile chrome /opt/google/chrome/chrome {
   include <abstractions/fenrig-chromium-common>
   /opt/google/chrome/** ixr,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/google-chrome/** rwk,
   owner @{HOME}/.cache/google-chrome/** rwk,
   owner @{HOME}/.local/share/google-chrome/** rwk,

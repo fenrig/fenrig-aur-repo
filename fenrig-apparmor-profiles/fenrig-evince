@@ -7,6 +7,11 @@ include <tunables/global>
 profile evince /usr/bin/evince {
   include <abstractions/fenrig-document-common>
   /usr/bin/evince mr,
+  /usr/lib/firefox/firefox Px -> firefox,
+  /usr/lib/chromium/chromium Px -> chromium,
+  /opt/google/chrome/chrome Px -> chrome,
+  /usr/bin/cromite Px -> cromite,
+  /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/evince/** rwk,
   owner @{HOME}/.cache/evince/** rwk,
   include if exists <local/fenrig-evince>
