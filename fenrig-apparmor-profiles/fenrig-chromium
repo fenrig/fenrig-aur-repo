@@ -9,7 +9,11 @@ profile chromium /usr/lib/chromium/chromium {
   /usr/lib/chromium/** ixr,
   /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/chromium/** rwk,
+  owner @{HOME}/.cache/chromium/ rw,
   owner @{HOME}/.cache/chromium/** rwk,
+  owner @{HOME}/.pki/ r,
+  owner @{HOME}/.pki/nssdb/ rw,
+  owner @{HOME}/.pki/nssdb/** rwk,
   owner @{HOME}/.local/share/chromium/** rwk,
   include if exists <local/fenrig-chromium>
 }

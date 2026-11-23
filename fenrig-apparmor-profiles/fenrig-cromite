@@ -24,7 +24,11 @@ profile cromite /usr/bin/cromite {
   # separately confined Chromium profile must not be treated as isolated from
   # one another while they share this directory.
   owner @{HOME}/.config/chromium/** rwk,
+  owner @{HOME}/.cache/chromium/ rw,
   owner @{HOME}/.cache/chromium/** rwk,
+  owner @{HOME}/.pki/ r,
+  owner @{HOME}/.pki/nssdb/ rw,
+  owner @{HOME}/.pki/nssdb/** rwk,
   owner @{HOME}/.local/share/cromite/** rwk,
   include if exists <local/fenrig-cromite>
 }

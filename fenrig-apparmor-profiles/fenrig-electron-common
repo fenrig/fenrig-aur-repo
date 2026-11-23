@@ -22,6 +22,7 @@ include if exists <local/fenrig-xdg-open>
 include <abstractions/fenrig-sandbox-common>
 include <abstractions/fenrig-removable-common>
 include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-plasma-browser-common>
 include <abstractions/fenrig-gpu-common>
 include <abstractions/fenrig-tablet-common>
 

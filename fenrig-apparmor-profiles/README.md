@@ -23,23 +23,38 @@ missing GPU denials should be investigated before adding local rules.
 The policies retain Firefox/Thunderbird's own sandbox and permit the standard
 Wayland, audio/video, fonts, Mesa/Vulkan, CUPS, D-Bus, dconf, KDE, portal/file
 chooser and DNS resources through AppArmor abstractions. Persistent access is
-limited to the relevant Mozilla profile, Thunderbird mail profile, user-owned
-home and mounted-storage locations, and runtime temporary/shared-memory
-objects. Browser file saving is intentionally broad; SSH/GPG/cloud credential
-directories and shell startup files remain denied. The policies do not claim
+limited to the relevant Mozilla profile, Thunderbird mail profile, explicit
+application state, non-hidden user-owned home files, and mounted-storage
+locations. Browser file saving remains available throughout the normal
+non-hidden home directory; hidden dot-file state is granted only where the
+application needs it. SSH/GPG/cloud credential directories and shell startup
+files remain denied. The policies do not claim
 to protect cookies, saved credentials, or mail stores from their owning
 application.
 
 The shared sandbox abstraction applies the common user-namespace mapping,
 Wayland proxy, bubblewrap/Glycin, hardware-probing, and overflow-ID reads to
 Firefox, Thunderbird, Chromium/Chrome/Electron-family applications, and the
-document/media policies. Application-specific data rules remain separate.
+document/media policies. It does not grant shared administrative or network
+capabilities; compatibility capabilities remain in the specific profiles that
+require them. Application-specific data rules remain separate.
 
-All covered applications may read user-owned home-directory contents for
-desktop indexing, archive inspection, file pickers, and helper discovery. The
-explicit sensitive-directory and shell-startup-file denials still take
-precedence over that common read allowance; write access remains
-profile-specific.
+Bubblewrap is entered through the package-owned, unattached
+`fenrig-bwrap` profile rather than a competing attachment to `/usr/bin/bwrap`.
+Its setup domain necessarily has broad namespace, mount, IPC, and capability
+permissions because bwrap constructs the sandbox itself. Once setup is
+complete, bwrap stacks child processes with `fenrig-bwrap-unpriv`, which audits
+and strips the setup capabilities. This keeps the broad setup policy out of
+the browser, Thunderbird, and document profiles, but it remains experimental:
+verify the resulting labels and sandbox behavior on the pilot machine, and do
+not add a second global `/usr/bin/bwrap` attachment from another package.
+
+Covered applications may read ordinary user-owned home-directory contents for
+desktop indexing, archive inspection, file pickers, and helper discovery.
+Hidden dot-files are not covered by that common rule; application profiles and
+shared KDE state abstractions explicitly grant only the dot-directories and
+files required for that application. Write access remains profile-specific,
+with browsers retaining non-hidden home save/download access.
 
 All packaged profiles also include a read-only runtime abstraction. It permits
 same-user `/proc/<pid>` inspection, `/proc/net/if_inet6`, cgroup `cpu.max` and
@@ -49,6 +64,10 @@ LibreOffice policy additionally covers its installed startup/printing files,
 `/etc/paperspecs`, the observed Thunderbird profile metadata, and the named
 printing/crypto helper programs under the existing LibreOffice confinement.
 Electron-family profiles include the standard local CUPS client abstraction.
+Chromium-family profiles also permit their own cache root and the user-owned
+NSS certificate database at `~/.pki/nssdb`; this is required for browser
+certificate and client-authentication support. NVIDIA device-symlink cleanup
+attempts remain denied.
 
 AppArmor mediates canonical paths rather than the symlink spelling used by the
 desktop. The current pilot machine maps `~/Downloads` to
@@ -88,6 +107,13 @@ directory-level read/write operations on `~/.config` for atomic configuration
 updates and explicit read/write access to `~/.config/kioslaverc`; it does not
 grant recursive access to every configuration file. The ClamAV native host is
 intentionally excluded.
+
+Browser profiles also include the Plasma Browser Integration abstraction. It
+allows the integration host to run and grants read access to
+`~/.config/kcminputrc`, `~/.config/kdedefaults/kcminputrc`, the read-only
+`~/.config/menus/` tree, plus direct `~/.cache/ksycoca*` cache and lock
+entries. It does not grant recursive access to the rest of `.config` or
+`.cache`.
 
 The ClamAV native-messaging host is entered with an AppArmor transition. Its
 policy permits the installed host, required libraries/configuration, inherited
@@ -148,10 +174,28 @@ From this directory:
 
 ```sh
 makepkg --verifysource
+makepkg --check
 makepkg -f
 namcap fenrig-apparmor-profiles-*.pkg.tar.zst   # if namcap is installed
 sudo pacman -U fenrig-apparmor-profiles-*.pkg.tar.zst
 ```
+
+After restarting applications on a target machine, run the installed
+non-invasive diagnostic:
+
+```sh
+/usr/share/doc/fenrig-apparmor-profiles/tests/runtime-check.sh
+sudo /usr/share/doc/fenrig-apparmor-profiles/tests/runtime-check.sh \\
+  --since '15 minutes ago'
+```
+
+The check does not load or unload policy, change enforcement mode, launch
+applications, or modify files. It reports loaded profile labels, bwrap child
+labels, recent denials, and—when run as root—read-only negative probes through
+`aa-exec -p firefox`. A reported denial is a review item rather than an
+automatic reason to add a rule. Use the manual pilot matrix below for actual
+downloads, portals, media, mail, printing, GPU, scanner, Steam, Wine, and
+Lutris functionality.
 
 Installation does not enable AppArmor, change the kernel command line, change
 the bootloader, or enable a systemd unit. Preserve the machine's existing LSM
@@ -213,6 +257,8 @@ apparmor_parser --skip-kernel-load --skip-read-cache --abort-on-error \
 apparmor_parser --skip-kernel-load --skip-read-cache --abort-on-error \
   -I /etc/apparmor.d -Q /etc/apparmor.d/fenrig-thunderbird
 apparmor_parser --skip-kernel-load --skip-read-cache --abort-on-error \
+  -I /etc/apparmor.d -Q /etc/apparmor.d/fenrig-bwrap
+apparmor_parser --skip-kernel-load --skip-read-cache --abort-on-error \
   -I /etc/apparmor.d -Q /etc/apparmor.d/fenrig-clamav-native
 for profile in fenrig-libreoffice fenrig-evince fenrig-gwenview \
   fenrig-okular fenrig-ark fenrig-spectacle fenrig-mpv; do
@@ -243,6 +289,9 @@ record profile labels from `aa-status` and `/proc/$PID/attr/current`:
 1. Start Firefox, Thunderbird, LibreOffice, Gwenview, Okular, Ark, Spectacle,
    mpv, Transmission Qt, and Lutris; start Evince if installed. Verify the main process and
    plugin/helper children remain functional and retain their built-in sandbox.
+   For applications using bwrap/Glycin, record whether helpers show
+   `fenrig-bwrap` or `fenrig-bwrap-unpriv` in `/proc/$PID/attr/current` and
+   confirm that the application sandbox still reports enabled.
 2. Exercise DNS, HTTPS browsing, mail send/receive, authentication, and
    certificate/token access.
 3. Test Downloads, uploads through the Plasma chooser, mail attachments,
@@ -252,7 +301,8 @@ record profile labels from `aa-status` and `/proc/$PID/attr/current`:
 4. Verify Plasma Wayland rendering, clipboard, audio/video, camera/microphone,
    printing, notifications, portals/file chooser, and KDE browser integration.
 5. For mpv, play a local file and a YouTube URL, verify Lua scripts under
-   `~/.config/mpv/scripts` load, verify yt-dlp starts under its child profile,
+   `~/.config/mpv/scripts` load, verify yt-dlp starts under the separate
+   `fenrig-mpv-yt-dlp` profile,
    test subtitles/cache/screenshots, and confirm unrelated helper execution is
    denied unless explicitly added through a local include.
 6. With ClamAV running, scan a harmless test file through both extensions and

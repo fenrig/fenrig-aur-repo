@@ -48,7 +48,7 @@ profile lutris /usr/bin/lutris {
   /usr/lib/ r,
   /usr/bin/lutris rix,
   /usr/bin/python* rix,
-  /usr/bin/{pgrep,gcc,ld,ldconfig,glxinfo,uname,vulkaninfo,lspci,xrandr,gtk-update-icon-cache,gtk4-update-icon-cache,flatpak,bwrap,gamemoderun} ix,
+  /usr/bin/{pgrep,gcc,ld,ldconfig,glxinfo,uname,vulkaninfo,lspci,xrandr,gtk-update-icon-cache,gtk4-update-icon-cache,flatpak,gamemoderun} ix,
   /usr/bin/bash rix,
   /usr/bin/env ix,
   /usr/bin/wine rix,
@@ -79,7 +79,10 @@ profile lutris /usr/bin/lutris {
 # arbitrary user-owned prefixes, launchers, caches, and helper files anywhere
 # in HOME. The explicit private-data denies below remain authoritative.
 owner @{HOME}/ rw,
-owner @{HOME}/** rwkix,
+# Keep broad data access for launchers and prefixes, but do not make every
+# user-owned file executable. Execution remains explicit for game libraries,
+# Wine prefixes, Downloads, and the helper programs below.
+owner @{HOME}/** rwk,
 
   owner @{HOME}/.config/lutris/** rwk,
   owner @{HOME}/.local/share/lutris/** rwkix,

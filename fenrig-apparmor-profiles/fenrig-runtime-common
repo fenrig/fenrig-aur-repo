@@ -6,6 +6,7 @@ abi <abi/4.0>,
 # are non-secret system state and are read-only.
 owner @{PROC}/@{pid}/** r,
 owner @{PROC}/@{pid}/task/**/comm w,
+owner @{PROC}/@{pid}/clear_refs w,
 owner @{PROC}/@{pid}/{uid_map,gid_map,setgroups} rw,
 owner @{PROC}/@{pid}/coredump_filter w,
 /proc/net/if_inet6 r,
@@ -39,7 +40,9 @@ owner @{PROC}/@{pid}/coredump_filter w,
 /usr/lib/kf6/kioworker rix,
 /usr/bin/{testparm,net} rix,
 owner @{HOME}/ r,
-owner @{HOME}/** r,
+# Read ordinary user-owned home files for discovery and desktop integration;
+# hidden dot-files are granted only by explicit application rules.
+owner @{HOME}/[^.]** r,
 owner @{HOME}/.config/ rw,
 owner @{HOME}/.config/QtProject.conf rwk,
 owner @{HOME}/.config/kdeglobals.* rwl,

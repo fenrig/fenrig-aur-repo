@@ -1,7 +1,7 @@
 # Maintainer: Fenrig
 pkgname=fenrig-apparmor-profiles
 pkgver=0.1.0
-pkgrel=97
+pkgrel=108
 pkgdesc='Restrictive AppArmor policies for common Plasma desktop applications'
 arch=('any')
 url='https://github.com/fenrig/fenrig-aur-repo'
@@ -33,6 +33,7 @@ optdepends=(
   'steam: broad compatibility profile for the Steam client and Proton games'
   'wine-staging: broad compatibility profile for Wine applications'
 )
+checkdepends=('apparmor')
 install='fenrig-apparmor-profiles.install'
 source=(
   'fenrig-firefox'
@@ -50,6 +51,7 @@ source=(
   'fenrig-mumble'
   'fenrig-transmission-qt'
   'fenrig-mpv'
+  'fenrig-mpv-yt-dlp'
   'fenrig-lutris'
   'fenrig-electron'
   'fenrig-discord'
@@ -57,9 +59,11 @@ source=(
   'fenrig-wine'
   'fenrig-browser-common'
   'fenrig-sandbox-common'
+  'fenrig-bwrap'
   'fenrig-runtime-common'
   'fenrig-removable-common'
   'fenrig-kde-state-common'
+  'fenrig-plasma-browser-common'
   'fenrig-document-common'
   'fenrig-electron-common'
   'fenrig-chromium-common'
@@ -77,6 +81,7 @@ source=(
   'fenrig-apparmor-profiles.hook'
   'fenrig-apparmor-profiles.install'
   'README.md'
+  'runtime-check.sh'
   'LICENSE'
 )
 sha512sums=('58d33a1fa55e38d36cb510883318d70d50164eb642637e624179c5a3c11d4b41ab84b44910e9d251a24780b00634387f0a80d9167cebe3ea3b9893c85f334e8a'
@@ -87,25 +92,28 @@ sha512sums=('58d33a1fa55e38d36cb510883318d70d50164eb642637e624179c5a3c11d4b41ab8
             '1f29dfc7f79934c055f4e9831ffd9d49c9f47469c6b72234df0a7e0595bc98868065bdf8ac49a4e734e7dea054fba718698e1c4f659d52c8bf0ab2a23d90cb82'
             '4e9a6f2333b473e2e0480da68ca9bb1e60a41c814d01ab791ef3cb76f9d83a45fdde8e2717a9cdc815c07b2768f5c2d79e71614f92c74a54fbe8b80dba43b682'
             '5b59ef0dee8eb38c42cabe93f909aa388306e3f165168e3dd6c8ff94cd97689d755afa2cc3983b32b738c33b97df9ae35c9d2c0c5988314b148bfad18eaf601d'
-            '8743a50d9c1b54fb9e482ecb09d0e8ed8f1bfa12b618d651bcf8efe6a476b4272d6deb92711eaa18052cdb177c00b3c0a2f2a6295de8c7b863da230d466e7426'
-            '3d74ede6b97e4852285d574f8130063fd3d6fdfa5316e499c0f4991c45a5dd4b22d52225c1615039c110868ecf5c7b59a7c722004b6eadd7a2eda61705061622'
-            'f033096776ca5366c43ec5f2f1bf3c697b9911c868d5b6cc824f77245f76f40091e371533c17584923b57fb6dbd5f13b096660695bb0bc20807363d32b11a5fe'
+            'a56bfb202589f3e45e997b515e4945cb845a38f9b64096f858f84670b78fac6e077b455fb7bd6ed26675e6e386dcf291249c5a79a4893e05208040de2c39c8a9'
+            'a1d2e5eae2d19cdb0d30d0fa03b6e812fc584d92428f90dafa16b66781394f463a4e5191edd6109122996c17b59f5130c5549f81712c413af18c008063b3e508'
+            '5405a806110ac468a52896f99b6b2db09363628f179bee7fab475dd309660c1f524705334f3e449023d779aa9e3aca8e05ea5e01474cf70cfaa15a1a2ec175c7'
             '04bd772a2b4bf3b183db37b1b4ae23ed4102385a6614253fc98b5e2dc0f7f971bbf830e303a8876722449df96b41a775e14cdbd916b4a598a71d791042a5bac8'
             'efc435a6d420757bf60050b2865cdcf2a1a459a9a6df543055c933dfa3ce9577297fd5c295050e5758542863dc253dc41a9c83095536f516ad0fb44f2f199ffe'
             'b003a2b381496022b57389e1b5df4ae058698749bdd31ee0f683706aa6dc92b0fb4d8840a5da4743559396a4eafb853068bc099e70cc4046f130d639f324b8db'
-            '78333ad2974fe08ac2abf9fa91974c0d75b4ec1589557f36c36b03d8cc4b1998baf73ba370cf272da0be2c09872bdd7ae5bef52ab796a82f4ca0cbf8099cf82d'
-            'edddf977e3b780ba2623a4bbe08f8a4aeb82c6149911dbed1f5e8fc0bbc39949b6a557f8de83c02d6b11ab55a26fcfda7dbb9230d1b4986139549d59d59c8860'
+            'b4b7377ec59e88c6c4cac3a3c11e904799a6febeac53198c1519b22387b2334f9b8f065495af8909f982ceeb6195c963264b987151cbe3521573c3e825c1305b'
+            'b3c91d7b1f8c188f910a2d7dcc4b683a95ce657bccaf5f881587c37972c463afc9d4929dd3401ab3c9fd5468f8215faa2a69be6e754b5e5769b581a65e0bd41b'
+            '5d0249f5b411ccb4ba143c1e6c25f944c6439b539cafdf49914975b006990c39eaba1bfbbfe0241778a68a4d2e78c78f1835b362845632d0b076b784c0d494d9'
             'd61d77ef3e1a80aa966cd20b35ecd3c6202069b89b66f8760588e226303e9670ac9513361ad27578772ef481c334a2b23720697e65b75d56894a6ffd73709f31'
             '7edeefff8a206f69d1b49e94245ca721c90320588b89e1ae119a067a608f214db94e065139c6b99e3c6926c5ff7b74423ad629193c15e48e50a2e956cf27b372'
             '35cde8937b8b75e5af5057431c111ac6b833193867e38cf1a9c1bcf4cb39b943eaa7c142f833148063702f345666a80bad281ecafae37b5170ded23d2a19f6ee'
             'e3bef1edc99b6897fe90d964e2c334a7670020564cd37c95b3637ceb74c67960f745e9c3c923cc9b5aed5c0ce71188deb854c03de67c07dae4582b3e5d231992'
-            '2aa01363b4347fd628d79c3e301e57507e7a9cd14670a77a9bcee92a9fb063037a0ae7133c664be1515916597f4b6236a917dad65013b9b08eb1c406ab048915'
-            'efb531ae96664a0c8b0a050e0f2d360bbddf60a35bb159ebc2c3dfc49f449d538e4402f4cd6d93c436e07a6643558aa751bff6a0346ab1202223227fa6a3935c'
-            '95cc1c9b859155d49f0809c37d8f749df369db68b88eb00227136569d9622e4abd9db4254b7a95762b84500e5b759364f4ebbfe8050ca271a316407395802548'
+            'c5861e5b1b41d8e75d2617c72ff16412ffbdb0350918818496a55a6d3ebfc40196c4ecae7a07a7225a380a0f86c6f93da98328bd9b5172b3493c3e81e77cd0db'
+            'e5b3315c56af029dedc8928c14f21a597e43ba9c144445ba4283be71fa4dec095ee5c974801556923b5648b93ba7b1b43860fd21024c8e2fec0ce85a35434160'
+            '6e59022ac01b8d1546af234cce3b1e7438f717a94b9a3935a3c2936488f11075df165b74c861eee998254eb70dbec0afaddc76c3e6a619758019fd0dae45ac6e'
+            'f304f0269b3ee977a8cb3cf2f5d127f85f4a8405057a0c2a9842b98380f3ef60dce6d908fcbac57a05d316a87f5bc851bc1d541c1e95f487564dadbc6a2abefc'
             '929b9ddb7ca06b0440b8ad6fd9c1e07986381922414736fb61d8305f9e9ec79fb47499bc9d1f7b5f493e4bbf3b8473d911d09216d8bdf992a7f6b5fe243bcab0'
             'ccf3b1aca2cdded9dd31ae8911e270579043aff94eaa5d88a2520423ce7b3ef5d6aea63d62b5a918ae6e16f3312c6eeece3a0ae2a93e49523e762572c4a7f8c7'
+            '34eec6c331cd7c8715f18e4c0eb56c63fce2dfc1c73428807e45d5c602c1fa8876fe45b0a5d5a0f6c99fcf064feb2df6e685299cb22a337104ca6387d70b9e4e'
             'e3fe37b3e1074fe3400d75e408720af2ddd903afae0c8648b7174a5bdd76fee2aecc3a905a94467f951ef497827d22622de232662c4804fbac61674543d4e70c'
-            '2b7d81f461720c8c42890a0953f4a5cbc30dc4c81d78640613ee0418480d25a16407b2732e4484e8f530b94a4fd7b49554dffa623535ee8394b74fd46842c921'
+            'f7e5a254227d369e86bcbc9a06fb09bdf80d4611d42c4471549e21a731219272db536bd9d2a62e0e2a4ce8147a82135ac7e4cab358a03119b6abe7fda874f809'
             '5569734b5a25fd55af4be42db2abb9b23812b3bfc2a0b25e01ec3a8cbf1a908d4f5c522deee25bc1e4f297350e50b0cf66d7e81857f9d9c4845757f8131a27e5'
             '1e8bd1c431f067b927ac83e3ba5b170efdb97595155b9ca794911ef5cc2fc152f09826ba031b58bb1e703b479d67fb08a8fc69fcc0f3b31f6b7c1e9bcca3c303'
             'c5b20f742120238fa1d4f1d1a8b28afdc8b2658bc78ebcf719bbd77bdca78d24540fb2e247d46600d7faee1a5038c118ce550ca5d7b612746d824988aedd3264'
@@ -117,11 +125,49 @@ sha512sums=('58d33a1fa55e38d36cb510883318d70d50164eb642637e624179c5a3c11d4b41ab8
             '002832a1fe0923bc92c3699563bb097ad1ecf162f27a3e98638a1cd0f1995138eda41516c5c09532def4d601f5f80708ec4575dbed60b229b93378dcd7a422d7'
             '98cf11acad010993035d64e40f2591a61e5ec2d79a485b77a18552b54e1a07f83d13839852a11d75b541d47c313766a105d89d9de61df59f1c6993f46e00f580'
             'a37d12950f6690319e8c4218fb51f60c5eab4d86ec000390962d8a0edfbf9a96bb89ec36b397ddb950aa44dc255f7816168e63355fdacd287820410d77ead376'
-            '69dc98905a097f28e13ca195f904b5daad8126cf2602acee1f0e7f824e759c2f66967fa708ea976ff400a803973f812e40bdec77876a8e07419c7615db7e1790'
-            '7852640fa504e864490f574c458134a9850c567aabb5fb4da254168da76b1604b38b36895899de8b9ad7a7b4bf595a765c16273a5a71600548e50e645cbb6b89'
-            '45f396ba16d9186b18a2a4df9e92c7249b77d4093a7d3b9ccc224f898cf6de4a8f0c61647d607b1d11bc1dae4dc39a5fd35fe88fe5492daa42f5083903b32432'
-            '6cdf7418cf7f7db4d4c539c6314e5f4b142f99de8df06291291c614abb531300674bd20ff828834fd4b5491416d0a56b7bc04bdcef9d713b5d47a053d827e8ed'
+            '3a19e79dbaf7a243b7cf6e8a7f1e4cd9ac3a9414e872568321a9be9cc952c781291e13b7967ea654ecc4ecd487962178abaae04827eeb9005f100dfde153d3ed'
+            '3ffb1d75669770dcf0031f2b8781626acb3c4500143cdf1d651f3417459f7b10a479e42e8d747b9c4da83b67280a7b748e64ccb86ea6457b0555d305584186dd'
+            'f53c27a4a13c8b497348062639e669b8cb0d8cdfaed7a01722431039cc2d273614144641f4eed59bb05f98d34c648afdb83528eba224a61dac93ca0eb9b1086f'
+            '62c288c7b2753a36c9a5cef958327c69612b609ca51df3536cc072e7381c96165c39b199fe227745cd749c4eb70d2bfb5941aa77bff9cdf7bb8390a9c09a55d9'
+            '20002f049d2127e7cce124b629cca68bfce6aa8462968a7dc43c859f69e7395dd4990899d5c10fc6233966c71a01b3520451fe16d4100a175f064e99ce98a6e1'
             '5fcf0a3325d64e27063c0c07bc2017d00fd060f5b070c1d59888c072197ba661acdc074087d55895186264456f49d26a801554468d0e76a2a8b21eb300d92027')
+
+check() {
+  local checkdir profile
+  local profiles=(
+    fenrig-bwrap fenrig-firefox fenrig-thunderbird fenrig-libreoffice
+    fenrig-evince fenrig-gwenview fenrig-okular fenrig-ark fenrig-spectacle
+    fenrig-chromium fenrig-chrome fenrig-cromite fenrig-wowup-cf fenrig-mumble
+    fenrig-transmission-qt fenrig-mpv fenrig-mpv-yt-dlp fenrig-lutris fenrig-electron fenrig-discord
+    fenrig-steam fenrig-wine fenrig-clamav-native fenrig-clamav-quarantine-gui
+    fenrig-clamav-scan-gui fenrig-clamav-scan-quarantine-helper
+  )
+  local abstractions=(
+    fenrig-browser-common fenrig-sandbox-common fenrig-runtime-common
+    fenrig-removable-common fenrig-kde-state-common fenrig-plasma-browser-common
+    fenrig-document-common fenrig-electron-common fenrig-chromium-common
+    fenrig-compat-common fenrig-gpu-common fenrig-gpu-wrappers-common
+    fenrig-game-input-common fenrig-eid-common fenrig-tablet-common
+  )
+
+  checkdir=$(mktemp -d)
+  trap 'rm -rf -- "$checkdir"' EXIT
+  mkdir -p "$checkdir/abstractions" "$checkdir/local"
+
+  for profile in "${abstractions[@]}"; do
+    install -Dm644 "$srcdir/$profile" "$checkdir/abstractions/$profile"
+  done
+
+  for profile in "${profiles[@]}"; do
+    install -Dm644 "$srcdir/$profile" "$checkdir/$profile"
+  done
+
+  for profile in "${profiles[@]}"; do
+    printf 'Checking AppArmor profile %s\n' "$profile"
+    apparmor_parser --skip-kernel-load --skip-read-cache --abort-on-error \
+      -I "$checkdir" -I /etc/apparmor.d -Q "$checkdir/$profile"
+  done
+}
 
 package() {
   install -Dm644 "$srcdir/fenrig-firefox" "$pkgdir/etc/apparmor.d/fenrig-firefox"
@@ -139,6 +185,7 @@ package() {
   install -Dm644 "$srcdir/fenrig-mumble" "$pkgdir/etc/apparmor.d/fenrig-mumble"
   install -Dm644 "$srcdir/fenrig-transmission-qt" "$pkgdir/etc/apparmor.d/fenrig-transmission-qt"
   install -Dm644 "$srcdir/fenrig-mpv" "$pkgdir/etc/apparmor.d/fenrig-mpv"
+  install -Dm644 "$srcdir/fenrig-mpv-yt-dlp" "$pkgdir/etc/apparmor.d/fenrig-mpv-yt-dlp"
   install -Dm644 "$srcdir/fenrig-lutris" "$pkgdir/etc/apparmor.d/fenrig-lutris"
   install -Dm644 "$srcdir/fenrig-electron" "$pkgdir/etc/apparmor.d/fenrig-electron"
   install -Dm644 "$srcdir/fenrig-discord" "$pkgdir/etc/apparmor.d/fenrig-discord"
@@ -146,9 +193,11 @@ package() {
   install -Dm644 "$srcdir/fenrig-wine" "$pkgdir/etc/apparmor.d/fenrig-wine"
   install -Dm644 "$srcdir/fenrig-browser-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-browser-common"
   install -Dm644 "$srcdir/fenrig-sandbox-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-sandbox-common"
+  install -Dm644 "$srcdir/fenrig-bwrap" "$pkgdir/etc/apparmor.d/fenrig-bwrap"
   install -Dm644 "$srcdir/fenrig-runtime-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-runtime-common"
   install -Dm644 "$srcdir/fenrig-removable-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-removable-common"
   install -Dm644 "$srcdir/fenrig-kde-state-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-kde-state-common"
+  install -Dm644 "$srcdir/fenrig-plasma-browser-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-plasma-browser-common"
   install -Dm644 "$srcdir/fenrig-document-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-document-common"
   install -Dm644 "$srcdir/fenrig-electron-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-electron-common"
   install -Dm644 "$srcdir/fenrig-chromium-common" "$pkgdir/etc/apparmor.d/abstractions/fenrig-chromium-common"
@@ -165,6 +214,7 @@ package() {
   install -Dm755 "$srcdir/fenrig-apparmor-profiles-reload" "$pkgdir/usr/lib/fenrig-apparmor-profiles/reload"
   install -Dm644 "$srcdir/fenrig-apparmor-profiles.hook" "$pkgdir/usr/share/libalpm/hooks/fenrig-apparmor-profiles.hook"
   install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm755 "$srcdir/runtime-check.sh" "$pkgdir/usr/share/doc/$pkgname/tests/runtime-check.sh"
   install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 

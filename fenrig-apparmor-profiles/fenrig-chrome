@@ -9,7 +9,11 @@ profile chrome /opt/google/chrome/chrome {
   /opt/google/chrome/** ixr,
   /usr/lib/thunderbird/thunderbird Px -> thunderbird,
   owner @{HOME}/.config/google-chrome/** rwk,
+  owner @{HOME}/.cache/google-chrome/ rw,
   owner @{HOME}/.cache/google-chrome/** rwk,
+  owner @{HOME}/.pki/ r,
+  owner @{HOME}/.pki/nssdb/ rw,
+  owner @{HOME}/.pki/nssdb/** rwk,
   owner @{HOME}/.local/share/google-chrome/** rwk,
   include if exists <local/fenrig-chrome>
 }

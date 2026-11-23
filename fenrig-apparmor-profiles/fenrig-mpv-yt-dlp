@@ -1,0 +1,40 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+# Kept separate from fenrig-mpv so upgrades can replace the helper without
+# depending on the kernel's nested-profile replacement behaviour.
+profile fenrig-mpv-yt-dlp /usr/bin/yt-dlp {
+  include <abstractions/fenrig-runtime-common>
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/openssl>
+
+  network inet stream,
+  network inet6 stream,
+  network inet dgram,
+  network inet6 dgram,
+
+  /usr/bin/yt-dlp r,
+  /usr/bin/python* rix,
+  /usr/lib/python*/** r,
+  /usr/lib/** mr,
+  /etc/{,ssl/} r,
+  /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone} r,
+  /etc/ssl/certs/** r,
+  owner @{HOME}/.cache/yt-dlp/** rwk,
+  owner @{HOME}/.config/yt-dlp/** rwk,
+  owner @{HOME}/Downloads/** rwk,
+  owner /tmp/** rwk,
+  owner /var/tmp/** rwk,
+
+  deny @{HOME}/.ssh/** r,
+  deny @{HOME}/.gnupg/** r,
+  deny @{HOME}/.aws/** r,
+  deny @{HOME}/.kube/** r,
+  deny @{HOME}/.config/mozilla/** r,
+  deny @{HOME}/.thunderbird/** r,
+  deny @{HOME}/.config/google-chrome/** r,
+  deny @{HOME}/.config/chromium/** r,
+  include if exists <local/fenrig-mpv-yt-dlp>
+}

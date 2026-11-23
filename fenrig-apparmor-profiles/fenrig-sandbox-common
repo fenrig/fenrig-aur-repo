@@ -5,9 +5,8 @@ include <abstractions/fenrig-runtime-common>
 # Shared runtime permissions for user namespaces, bubblewrap/Glycin, and
 # hardware probing. These rules do not grant general home-directory access.
 userns,
- # bwrap uses this inside an isolated network namespace to configure loopback.
- capability net_admin,
 owner /run/user/*/wayland-proxy-* rwk,
+/proc/sys/user/max_user_namespaces r,
 /proc/sys/kernel/{overflowuid,overflowgid} r,
 /sys/devices/system/cpu/ r,
 /sys/devices/system/cpu/** r,
@@ -16,5 +15,9 @@ owner /run/user/*/wayland-proxy-* rwk,
 /sys/bus/pci/devices/**/class r,
 /sys/devices/**/class r,
 /sys/devices/virtual/dmi/id/product_sku r,
-/usr/bin/bwrap ix,
+/usr/bin/bwrap Px -> fenrig-bwrap,
 /usr/lib/glycin-loaders/** rix,
+
+# Glycin terminates its bwrap helper after a loader exits. Keep this
+# relationship explicit instead of granting general signal access.
+signal (send) set=(kill) peer=fenrig-bwrap,

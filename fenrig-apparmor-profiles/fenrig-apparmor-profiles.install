@@ -43,6 +43,7 @@ post_remove() {
   cat >&2 <<'EOF'
 
 If profiles remain loaded after removal, remove them explicitly:
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-bwrap
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-firefox
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-thunderbird
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-clamav-native
@@ -60,6 +61,7 @@ If profiles remain loaded after removal, remove them explicitly:
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-wowup-cf
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-mumble
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-mpv
+  sudo apparmor_parser -R /etc/apparmor.d/fenrig-mpv-yt-dlp
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-lutris
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-electron
   sudo apparmor_parser -R /etc/apparmor.d/fenrig-discord

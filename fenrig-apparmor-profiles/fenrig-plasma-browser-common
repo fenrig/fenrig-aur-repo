@@ -1,0 +1,17 @@
+# vim:syntax=apparmor
+abi <abi/4.0>,
+
+# Plasma Browser Integration reads the KDE input configuration and the
+# generated KSysCache. It creates short-lived KSysCache lock files while
+# refreshing the cache. The cache directory rule permits those direct lock
+# entries but does not grant recursive access to unrelated cache trees.
+owner @{HOME}/.config/kcminputrc r,
+owner @{HOME}/.config/kdedefaults/ r,
+owner @{HOME}/.config/kdedefaults/kcminputrc r,
+owner @{HOME}/.config/menus/ r,
+owner @{HOME}/.config/menus/** r,
+owner @{HOME}/.cache/ rw,
+owner @{HOME}/.cache/ksycoca* rwk,
+
+# Native-messaging host used by the Plasma browser integration extension.
+/usr/bin/plasma-browser-integration-host rix,

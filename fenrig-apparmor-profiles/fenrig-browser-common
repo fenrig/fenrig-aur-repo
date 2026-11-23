@@ -21,6 +21,7 @@ include if exists <local/fenrig-xdg-open>
 include <abstractions/fenrig-sandbox-common>
 include <abstractions/fenrig-removable-common>
 include <abstractions/fenrig-kde-state-common>
+include <abstractions/fenrig-plasma-browser-common>
 include <abstractions/fenrig-gpu-common>
 include <abstractions/fenrig-eid-common>
 
@@ -35,8 +36,6 @@ include <abstractions/fenrig-eid-common>
 /usr/share/icons/** r,
 /usr/share/locale/** r,
 
-capability sys_admin,
-capability sys_chroot,
 owner @{PROC}/@{pid}/** r,
 owner @{PROC}/@{pid}/oom_score_adj w,
 owner /{dev,run,var/run}/shm/{shmfd-*,org.mozilla.*,wayland.mozilla.ipc.*} rwk,
@@ -46,11 +45,11 @@ owner /var/tmp/** rwk,
 /sys/fs/cgroup/**/cpu.max r,
 / r,
 
-# Firefox/Thunderbird users may choose arbitrary save locations. This is
-# intentionally broad for browser file workflows; sensitive credential and
-# shell paths remain denied below.
+# Firefox/Thunderbird users may choose arbitrary non-hidden save locations.
+# Hidden application state is granted explicitly below or by the
+# application-specific profile.
 owner @{HOME}/ rw,
-owner @{HOME}/** rwk,
+owner @{HOME}/[^.]** rwk,
 owner /mnt/multi/ rw,
 owner /mnt/multi/** rwk,
 owner /run/media/ rw,
@@ -85,7 +84,6 @@ owner @{HOME}/.local/share/applications/mimeinfo.cache r,
 /usr/bin/xdg-open ix,
 /usr/bin/gio ix,
 /usr/lib/gio-launch-desktop ix,
-/usr/bin/plasma-browser-integration-host rix,
 /usr/bin/okular Px -> okular,
 /usr/bin/evince Px -> evince,
 /usr/bin/gwenview Px -> gwenview,
