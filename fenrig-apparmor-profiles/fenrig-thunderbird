@@ -14,7 +14,6 @@ profile thunderbird /usr/lib/thunderbird/thunderbird flags=(attach_disconnected)
   /usr/lib/thunderbird/{crashhelper,gfxtest,plugin-container} rix,
   /usr/lib/thunderbird/ r,
   /usr/lib/thunderbird/** mrix,
-  /usr/lib/gio-launch-desktop ix,
   deny /usr/lib/thunderbird/** w,
   /usr/libexec/clamav/clamav-thunderbird-host rPx -> fenrig-clamav-native,
   include if exists <local/fenrig-thunderbird>
