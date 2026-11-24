@@ -8,7 +8,11 @@ profile mumble /usr/bin/mumble {
   network inet6 stream,
   network inet dgram,
   network inet6 dgram,
+  # Qt monitors interface state through netlink datagram sockets. This does
+  # not grant ordinary IP networking or permission to modify network state.
+  network netlink dgram,
   /usr/bin/mumble mr,
+  /usr/bin/speech-dispatcher ix,
   /usr/lib/mumble/** mr,
   owner @{HOME}/.config/Mumble/** rwk,
   owner @{HOME}/.local/share/Mumble/** rwk,

@@ -23,5 +23,10 @@ profile wowup-cf /opt/wowup-cf/wowup-cf {
   owner @{HOME}/.cache/WowUpCf/** rwkl,
   owner @{HOME}/.config/ow-electron/ rwkl,
   owner @{HOME}/.config/ow-electron/** rwkl,
+  # Electron/NSS uses the user's shared certificate and PKCS#11 database.
+  # Keep this owner-scoped and limited to the NSS database subtree.
+  owner @{HOME}/.pki/ r,
+  owner @{HOME}/.pki/nssdb/ rw,
+  owner @{HOME}/.pki/nssdb/** rwk,
   include if exists <local/fenrig-wowup-cf>
 }
