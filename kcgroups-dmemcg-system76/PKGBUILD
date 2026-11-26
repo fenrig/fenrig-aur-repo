@@ -5,18 +5,22 @@ pkgname=('kcgroups-dmemcg-system76' 'plasma-foreground-booster-dmemcg-system76')
 _branch=dmemcg-system76
 
 pkgver=r82.gd106f1c
-pkgrel=1
+pkgrel=2
 
 pkgdesc="KDE library to manipulate cgroups (and boost foreground apps) - fork adding dmem cgroup support"
 arch=('i686' 'x86_64')
 url='https://github.com/fenrig/kcgroups'
 license=('LGPL-2.1-or-later')
-makedepends=('qt6-base' 'plasma-workspace' 'kwindowsystem' 'kconfig' 'kdbusaddons' 'cmake' 'extra-cmake-modules' 'git')
+makedepends=('qt6-base' 'plasma-workspace' 'kwindowsystem' 'kconfig' 'kdbusaddons' 'cmake' 'extra-cmake-modules' 'git' 'libx11' 'systemd')
 conflicts=('kcgroups-git' 'kcgroups-dmemcg')
 source=("kcgroups::git+$url#branch=${_branch}"
-	"plasma-foreground-booster::git+$url#branch=${_branch}-foreground-booster")
+	"plasma-foreground-booster::git+$url#branch=${_branch}-foreground-booster"
+	'gamescope-foreground-companion.c'
+	'gamescope-foreground-companion.service')
 sha256sums=('SKIP'
-            'SKIP')
+            'SKIP'
+            '8af2f525447b51e8979c1d8160cf259bc1d94288f3ca7218beb44e0595bdd51a'
+            '62e0f9f529935b302ee12a0d0de771afc64ffc9762f90e1b39f6e5449dafd0e4')
 
 pkgver() {
     cd "$srcdir/kcgroups"
@@ -26,6 +30,7 @@ pkgver() {
 }
 
 prepare() {
+  rm -rf kcgroups-build kcgroups-install plasma-foreground-booster-build
   mkdir -p kcgroups-build
   mkdir -p kcgroups-install
   mkdir -p plasma-foreground-booster-build
@@ -48,12 +53,25 @@ build () {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo
     make
+
+    cc -std=c11 -O2 -Wall -Wextra -Wpedantic \
+        $(pkg-config --cflags x11 libsystemd) \
+        -o "${srcdir}/gamescope-foreground-companion" "${srcdir}/gamescope-foreground-companion.c" \
+        $(pkg-config --libs x11 libsystemd)
 }
 
 package_kcgroups-dmemcg-system76() {
-    depends=('qt6-base' 'kwindowsystem' 'kconfig' 'kdbusaddons')
+    depends=('qt6-base' 'kwindowsystem' 'kconfig' 'kdbusaddons' 'libx11' 'systemd-libs')
     cd "kcgroups-build"
     make DESTDIR="${pkgdir}" install
+
+    install -Dm755 "${srcdir}/gamescope-foreground-companion" \
+        "${pkgdir}/usr/bin/kcgroups-gamescope-companion"
+    install -Dm644 "${srcdir}/gamescope-foreground-companion.service" \
+        "${pkgdir}/usr/lib/systemd/user/gamescope-foreground-companion.service"
+    install -d "${pkgdir}/usr/lib/systemd/user/gamescope-session.target.wants"
+    ln -s ../gamescope-foreground-companion.service \
+        "${pkgdir}/usr/lib/systemd/user/gamescope-session.target.wants/gamescope-foreground-companion.service"
 }
 
 package_plasma-foreground-booster-dmemcg-system76() {

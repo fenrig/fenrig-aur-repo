@@ -1,0 +1,14 @@
+[Unit]
+Description=Gamescope foreground process companion
+After=gamescope-session.service
+PartOf=gamescope-session.target
+ConditionPathExists=%t/gamescope-environment
+
+[Service]
+Type=simple
+EnvironmentFile=%t/gamescope-environment
+ExecStart=/usr/bin/kcgroups-gamescope-companion
+Restart=on-failure
+
+[Install]
+WantedBy=gamescope-session.target
