@@ -32,11 +32,15 @@ profile lutris /usr/bin/lutris {
 
   /etc/{,ssl/} r,
   /etc/{hosts,resolv.conf,nsswitch.conf,localtime,timezone,mime.types} r,
+  # Lutris helpers use findmnt/libmount to discover filesystem mounts.
+  /etc/{fstab,mtab} r,
   /etc/ld.so.cache r,
   /etc/ssl/certs/** r,
   / r,
   /proc/ r,
   /proc/** r,
+  /run/mount/ r,
+  /run/mount/** r,
   @{sys}/devices/system/node/ r,
   @{sys}/devices/system/node/** r,
   /sys/class/drm/ r,
@@ -51,7 +55,7 @@ profile lutris /usr/bin/lutris {
   # Lutris launchers and runners may invoke arbitrary system commands.
   /usr/bin/** ix,
   /usr/sbin/** ix,
-  /usr/bin/{pgrep,gcc,ld,ldconfig,glxinfo,uname,vulkaninfo,lspci,xrandr,gtk-update-icon-cache,gtk4-update-icon-cache,flatpak,gamemoderun} ix,
+  /usr/bin/{findmnt,pgrep,gcc,ld,ldconfig,glxinfo,uname,vulkaninfo,lspci,xrandr,gtk-update-icon-cache,gtk4-update-icon-cache,flatpak,gamemoderun} ix,
   /usr/bin/bash rix,
   /usr/bin/env ix,
   /usr/bin/wine rix,
