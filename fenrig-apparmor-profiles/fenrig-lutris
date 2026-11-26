@@ -48,6 +48,9 @@ profile lutris /usr/bin/lutris {
   /usr/lib/ r,
   /usr/bin/lutris rix,
   /usr/bin/python* rix,
+  # Lutris launchers and runners may invoke arbitrary system commands.
+  /usr/bin/** ix,
+  /usr/sbin/** ix,
   /usr/bin/{pgrep,gcc,ld,ldconfig,glxinfo,uname,vulkaninfo,lspci,xrandr,gtk-update-icon-cache,gtk4-update-icon-cache,flatpak,gamemoderun} ix,
   /usr/bin/bash rix,
   /usr/bin/env ix,
